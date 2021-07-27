@@ -1,10 +1,9 @@
 from django.urls import path
-from audiobooks import views
+from users import views
 
-app_name = 'audiobooks'
+app_name = 'users'
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('create', views.create, name='create'),
-    path('recording', views.recording, name='recording'),
 ]

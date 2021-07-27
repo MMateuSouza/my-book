@@ -1,0 +1,9 @@
+from django.shortcuts import render
+
+
+def index(request):
+    return render(request, template_name='users/index.html')
+
+
+def create(request):
+    return render(request, template_name='users/create.html')

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Audiobooks{% endblock %}
+{% block title %}Novo Audiobook{% endblock %}
 
 {% block style %}
 {% endblock %}
@@ -12,9 +12,9 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <span>Audiobooks</span>
+                        <span>Novo Audiobook</span>
 
-                        <a class="btn btn-sm btn-primary" href="{% url 'audiobooks:create' %}">Novo</a>
+                        <a class="btn btn-sm btn-secondary" href="{% url 'audiobooks:index' %}">Voltar</a>
                     </div>
                     <div class="card-body">
 
