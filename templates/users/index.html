@@ -19,37 +19,58 @@
                     <div class="card-body">
                         <table class="table">
                             <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th scope="col">#</th>
                                 <th scope="col">Nome</th>
+                                <th scope="col">Usuário</th>
                                 <th scope="col">E-mail</th>
+                                <th scope="col">Perfil</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Ações</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                                <td>@twitter</td>
-                            </tr>
+                            {% for user in page_obj %}
+                                <tr class="text-center">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td class="text-capitalize">{{ user.first_name }} {{ user.last_name }}</td>
+                                    <td class="text-lowercase">{{ user.username }}</td>
+                                    <td class="text-lowercase">{{ user.email }}</td>
+                                    <td class="text-capitalize">Grupo Indefinido</td>
+                                    <td>
+                                        {% if user.is_active %}
+                                            <span class="badge bg-success">&nbsp;Ativo&nbsp;</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inativo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="#" class="btn btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                            <a href="{% url 'users:change' user.id %}" class="btn btn-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-sm justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primeiro</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                                {% endif %}
+                                <li class="page-item disabled"><a class="page-link" href="#">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</a></li>
+                                {% if page_obj.has_next %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Próximo</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Último &raquo;</a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

@@ -12,12 +12,67 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <span>Novo Usuário</span>
+                        <span>{% if user.id %}Editar{% else %}Novo{% endif %} Usuário</span>
 
                         <a class="btn btn-sm btn-secondary" href="{% url 'users:index' %}">Voltar</a>
                     </div>
                     <div class="card-body">
-
+                        <form method="POST" class="row g-3">
+                            {% csrf_token %}
+                            <div class="col-md-6 col-lg-4">
+                                <label for="first_name" class="form-label">Nome</label>
+                                <input type="text" class="form-control form-control-sm" id="first_name"
+                                       name="first_name">
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <label for="last_name" class="form-label">Sobrenome</label>
+                                <input type="text" class="form-control form-control-sm" id="last_name" name="last_name">
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <label for="username" class="form-label">Usuário</label>
+                                <input type="text" class="form-control form-control-sm" id="username" name="username">
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="text" class="form-control form-control-sm" id="email" name="email">
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-4">
+                                <label for="password1" class="form-label">Senha</label>
+                                <input type="password" class="form-control form-control-sm" id="password1"
+                                       name="password1">
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-4">
+                                <label for="password2" class="form-label">Confirmação da senha</label>
+                                <input type="password" class="form-control form-control-sm" id="password2"
+                                       name="password2">
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-4">
+                                <label for="inputState" class="form-label">Perfil de Usuário</label>
+                                <select id="group" name="group" class="form-select form-select-sm">
+                                    {% if groups %}
+                                        <option disabled>--- Selecione ---</option>
+                                        {% for group in groups %}
+                                            <option value="{{ group.id }}"
+                                                    class="text-capitalize">{{ group.name }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option selected disabled>Nenhum grupo cadastrado</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            {% if user.id %}
+                                <div class="col-6 col-md-6 col-lg-4 mt-5">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active"
+                                               checked>
+                                        <label class="form-check-label" for="is_active">Status do Usuário</label>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="d-flex justify-content-end col-12">
+                                <button type="submit" class="btn btn-sm btn-primary">{% if user.id %}Modificar{% else %}Cadastrar{% endif %}</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
