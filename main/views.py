@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 
 def index(request):
@@ -6,8 +6,10 @@ def index(request):
 
 
 def sign_in(request):
-    return render(request, template_name='main/index.html')
+    if request.method == 'POST':
+        return redirect('main:index')
+    return render(request, template_name='main/sign_in.html')
 
 
 def sign_out(request):
-    return render(request, template_name='main/index.html')
+    return redirect('main:sign_in')
