@@ -1,9 +1,10 @@
 from constance import config
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from users.forms import UserForm
+from users.models import User
 
 
 def index(request):

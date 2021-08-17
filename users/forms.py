@@ -40,6 +40,13 @@ class UserForm(ModelForm):
             'is_active': _('Status do Usuário'),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            if field != 'is_active' and field != 'password1' and field != 'password2':
+                self.fields[field].required = True
+
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
