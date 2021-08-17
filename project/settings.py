@@ -36,6 +36,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.spl
 INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'audiobooks.apps.AudiobooksConfig',
+    'constance.backends.database',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -66,6 +67,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                'constance.context_processors.config',
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -131,3 +133,11 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.User'
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_CONFIG = {
+    'ELEMENTS_PER_PAGE': (10, 'Quantidade de itens exibidos por página (Usuários, audiobooks, etc).', int),
+    'SYSTEM_NAME': ('MyBook', 'O nome do sistema mostrado no canto superior esquerdo', str),
+}
