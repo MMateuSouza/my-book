@@ -36,6 +36,17 @@
     </nav>
 </header>
 <main>
+    <section class="container">
+        <div class="row">
+            <div class="col">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </section>
     {% block content %}
     {% endblock %}
 </main>

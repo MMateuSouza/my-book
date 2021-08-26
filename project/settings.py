@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from decouple import config
 from dj_database_url import parse as db_url
+from django.contrib.messages import constants as messages
 
 from pathlib import Path
 
@@ -91,24 +92,6 @@ DATABASES = {
     )
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -127,7 +110,9 @@ USE_TZ = config('USE_TZ', cast=bool, default=True)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_ROOT = "static_prd/"
+STATIC_URL = "/static/"
+STATICFILES_DIRS = ( os.path.join("static"),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -140,4 +125,11 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'ELEMENTS_PER_PAGE': (10, 'Quantidade de itens exibidos por página (Usuários, audiobooks, etc).', int),
     'SYSTEM_NAME': ('MyBook', 'O nome do sistema mostrado no canto superior esquerdo', str),
+}
+
+MESSAGE_TAGS = {
+    messages.INFO:      'alert-info',
+    messages.SUCCESS:   'alert-success',
+    messages.WARNING:   'alert-warning',
+    messages.ERROR:     'alert-danger',
 }

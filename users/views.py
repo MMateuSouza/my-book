@@ -1,7 +1,8 @@
 from constance import config
+from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from users.forms import UserForm
 from users.models import User
@@ -25,9 +26,10 @@ def create(request, id=None):
         form = UserForm(request.POST, instance=user)
 
         if form.is_valid():
-            print()
-        else:
-            print(form.errors)
+            created_or_updated_msg = 'modificado' if user.id else 'criado'
+            form.save()
+            messages.success(request, f'Usuário {created_or_updated_msg} com sucesso!')
+            return redirect('users:index')
 
     groups = Group.objects.all()
     return render(request, context=locals(), template_name='users/create.html')

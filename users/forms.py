@@ -9,20 +9,18 @@ from users.models import User
 
 class UserForm(ModelForm):
     error_messages = {
-        'password_mismatch': _('The two password fields didn’t match.'),
+        'password_mismatch': _('As senhas fornecidas não coincidem.'),
     }
 
     password1 = forms.CharField(
         label=_("Senha"),
         strip=False,
-        help_text=password_validation.password_validators_help_text_html(),
         required=False,
     )
 
     password2 = forms.CharField(
         label=_("Confirmação da senha"),
         strip=False,
-        help_text=_("Enter the same password as before, for verification."),
         required=False,
     )
 
@@ -30,7 +28,20 @@ class UserForm(ModelForm):
         model = User
         fields = ['id', 'first_name', 'last_name', 'username', 'email', 'is_active']
 
-        error_messages = {}
+        error_messages = {
+            'first_name': {
+                'required': 'Nome é um campo obrigatório'
+            },
+            'last_name': {
+                'required': 'Sobrenome é um campo obrigatório'
+            },
+            'username': {
+                'required': 'Usuário é um campo obrigatório'
+            },
+            'email': {
+                'required': 'E-mail é um campo obrigatório'
+            },
+        }
 
         labels = {
             'first_name': _('Nome'),
