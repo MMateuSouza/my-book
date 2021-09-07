@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import Group
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
@@ -24,9 +25,13 @@ class UserForm(ModelForm):
         required=False,
     )
 
+    group = forms.IntegerField(
+        required=True,
+    )
+
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'username', 'email', 'is_active']
+        fields = ['id', 'first_name', 'last_name', 'username', 'email', 'is_active', 'group']
 
         error_messages = {
             'first_name': {
@@ -68,6 +73,18 @@ class UserForm(ModelForm):
             )
         return password2
 
+    def clean_group(self):
+        group_id = self.cleaned_data.get("group")
+        group = None
+
+        if group_id:
+            try:
+                group = Group.objects.get(pk=group_id)
+            except Group.DoesNotExist:
+                raise Group.DoesNotExist
+
+        return group
+
     def _post_clean(self):
         super()._post_clean()
 
@@ -77,3 +94,14 @@ class UserForm(ModelForm):
                 password_validation.validate_password(password, self.instance)
             except ValidationError as error:
                 self.add_error('password2', error)
+
+    def save(self):
+        super().save()
+
+        group = self.cleaned_data.get('group')
+        groups = self.instance.groups.all()
+
+        if not groups or group not in groups:
+            self.instance.groups.clear()
+            self.instance.groups.add(group)
+            self.instance.save()
