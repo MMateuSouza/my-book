@@ -133,3 +133,6 @@ MESSAGE_TAGS = {
     messages.WARNING:   'alert-warning',
     messages.ERROR:     'alert-danger',
 }
+
+LOGIN_URL='/sign_in/'
+LOGOUT_REDIRECT_URL='/sign_out/'

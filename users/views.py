@@ -1,5 +1,6 @@
 from constance import config
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
@@ -8,6 +9,7 @@ from users.forms import UserForm
 from users.models import User
 
 
+@login_required
 def index(request):
     users_list = User.objects.all().order_by('id')
     paginator = Paginator(users_list, config.ELEMENTS_PER_PAGE)
@@ -17,6 +19,7 @@ def index(request):
     return render(request, context={'page_obj': page_obj}, template_name='users/index.html')
 
 
+@login_required
 def create(request, id=None):
     user = User.objects.get(id=id) if id else User()
 

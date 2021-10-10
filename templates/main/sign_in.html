@@ -21,6 +21,12 @@
             <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                 <div class="card">
                     <div class="card-body">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+                        {% endfor %}
+                        {% endif %}
+
                         <form method="POST">
                             {% csrf_token %}
                             <div class="mb-3">
@@ -32,8 +38,8 @@
                                 <input type="password" class="form-control" id="password" name="password">
                             </div>
                             <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="keep_me_logged_in">
-                                <label class="form-check-label" for="keep_me_logged_in">Mantenha-me logado</label>
+                                <input type="checkbox" class="form-check-input" id="remember_me" name="remember_me">
+                                <label class="form-check-label" for="remember_me">Mantenha-me logado</label>
                             </div>
                             <div class="d-grid gap-2">
                                 <button class="btn btn-primary" type="submit">Autenticar</button>

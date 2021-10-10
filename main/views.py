@@ -1,15 +1,35 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 
+@login_required
 def index(request):
     return render(request, template_name='main/index.html')
 
 
 def sign_in(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated:
         return redirect('main:index')
+
+    elif request.method == 'POST':
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+        remember_me = True if request.POST.get('remember_me', None) == 'on' else False
+
+        user = authenticate(request, username=username, password=password)
+        if user:
+            # TODO: Verificar como adicionar a permanência de sessão
+            # request.session.set_expiry()
+            login(request, user)
+            return redirect('main:index')
+        messages.error(request, 'Usuário ou senha incorretos.')
+
     return render(request, template_name='main/sign_in.html')
 
 
 def sign_out(request):
+    logout(request)
+    messages.success(request, 'Sessão encerrada com sucesso.')
     return redirect('main:sign_in')
