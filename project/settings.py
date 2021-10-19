@@ -128,11 +128,15 @@ CONSTANCE_CONFIG = {
 }
 
 MESSAGE_TAGS = {
-    messages.INFO:      'alert-info',
-    messages.SUCCESS:   'alert-success',
-    messages.WARNING:   'alert-warning',
-    messages.ERROR:     'alert-danger',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
 }
 
-LOGIN_URL='/sign_in/'
-LOGOUT_REDIRECT_URL='/sign_out/'
+LOGIN_URL = '/sign_in/'
+LOGOUT_REDIRECT_URL = '/sign_out/'
+
+DEFAULT_ADMINISTRATOR_USERNAME = config('DEFAULT_ADMINISTRATOR_USERNAME', cast=str, default='admin')
+DEFAULT_ADMINISTRATOR_PASSWORD = config('DEFAULT_ADMINISTRATOR_PASSWORD', cast=str, default='12345')
+DEFAULT_ADMINISTRATOR_EMAIL = config('DEFAULT_ADMINISTRATOR_PASSWORD', cast=str, default='admin@admin.com')
