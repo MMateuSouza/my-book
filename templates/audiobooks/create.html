@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Novo Audiobook{% endblock %}
+{% block title %}Novo Livro{% endblock %}
 
 {% block style %}
 {% endblock %}
@@ -12,12 +12,131 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <span>Novo Audiobook</span>
+                        <span>Novo Livro</span>
 
                         <a class="btn btn-sm btn-secondary" href="{% url 'audiobooks:index' %}">Voltar</a>
                     </div>
                     <div class="card-body">
+                        <form method="POST" class="row g-3">
+                            {% csrf_token %}
+                            <div class="col-md-12 col-lg-7">
+                                <label for="{{ form.title.id_for_label }}"
+                                       class="form-label">{{ form.title.label }}</label>
+                                <input type="text" class="form-control form-control-sm text-capitalize {% if form.title.errors %}is-invalid{% endif %}"
+                                       id="{{ form.title.id_for_label }}"
+                                       maxlength="{{ form.fields.title.max_length }}"
+                                       name="{{ form.title.html_name }}"
+                                       value="{% if form.title.value %}{{ form.title.value }}{% endif %}">
+                                {% if form.title.errors %}
+                                <div class="invalid-feedback">
+                                {% for error in form.title.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-10 col-md-11 col-lg-4">
+                                <label for="{{ form.publishing_company.id_for_label }}"
+                                       class="form-label">{{ form.publishing_company.label }}</label>
+                                <input type="text" class="form-control form-control-sm text-capitalize {% if form.publishing_company.errors %}is-invalid{% endif %}"
+                                       id="{{ form.publishing_company.id_for_label }}"
+                                       maxlength="{{ form.fields.publishing_company.max_length }}"
+                                       name="{{ form.publishing_company.html_name }}"
+                                       value="{% if form.publishing_company.value %}{{ form.publishing_company.value }}{% endif %}">
+                                {% if form.publishing_company.errors %}
+                                <div class="invalid-feedback">
+                                {% for error in form.publishing_company.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-2 col-md-1 col-lg-1">
+                                <label for="{{ form.edition.id_for_label }}"
+                                       class="form-label">{{ form.edition.label }}</label>
+                                <input type="text" class="form-control form-control-sm text-lowercase {% if form.edition.errors %}is-invalid{% endif %}"
+                                       id="{{ form.edition.id_for_label }}"
+                                       maxlength="{{ form.fields.edition.max_length }}"
+                                       name="{{ form.edition.html_name }}"
+                                       value="{% if form.edition.value %}{{ form.edition.value }}{% endif %}">
+                                {% if form.edition.errors %}
+                                <div class="invalid-feedback">
+                                {% for error in form.edition.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-4">
+                                <label for="{{ form.isbn_10.id_for_label }}"
+                                       class="form-label">{{ form.isbn_10.label }}</label>
+                                <input type="email" class="form-control form-control-sm text-lowercase {% if form.isbn_10.errors %}is-invalid{% endif %}"
+                                       id="{{ form.isbn_10.id_for_label }}" maxlength="{{ form.fields.isbn_10.max_length }}"
+                                       name="{{ form.isbn_10.html_name }}"
+                                       value="{% if form.isbn_10.value %}{{ form.isbn_10.value }}{% endif %}">
+                                {% if form.isbn_10.errors %}
+                                <div class="invalid-feedback">
+                                {% for error in form.isbn_10.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-4">
+                                <label for="{{ form.isbn_13.id_for_label }}"
+                                       class="form-label">{{ form.isbn_13.label }}</label>
+                                <input type="email" class="form-control form-control-sm text-lowercase {% if form.isbn_13.errors %}is-invalid{% endif %}"
+                                       id="{{ form.isbn_13.id_for_label }}" maxlength="{{ form.fields.isbn_13.max_length }}"
+                                       name="{{ form.isbn_13.html_name }}"
+                                       value="{% if form.isbn_13.value %}{{ form.isbn_13.value }}{% endif %}">
+                                {% if form.isbn_13.errors %}
+                                <div class="invalid-feedback">
+                                {% for error in form.isbn_13.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
 
+                            <div class="col-12">
+                                <label for="authors">Autores</label>
+
+                                <div class="row">
+                                    <div class="col-6 mt-2">
+                                        <div class="input-group input-group-sm  mb-3">
+                                            <input type="text" class="form-control" id="author_name" name="author_name" placeholder="Nome do autor">
+                                            <button class="btn btn-outline-secondary" type="button" id="add_author_name">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between col-6 mt-2">
+                                        <select class="form-select form-select-sm" id="authors_name_list" name="authors_name_list" multiple>
+                                            <option value="1">Autor 1</option>
+                                            <option value="1">Autor 2</option>
+                                            <option value="1">Autor ...</option>
+                                            <option value="1">Autor N</option>
+                                        </select>
+
+                                        <button class="btn btn-sm btn-outline-secondary align-self-start disabled" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="chapters">Capítulos</label>
+
+                                <ol class="list-group list-group-numbered mt-2"  id="chapters">
+                                </ol>
+                            </div>
+
+                            <div class="d-flex justify-content-end col-12">
+                                <button type="submit" class="btn btn-sm btn-primary">{% if book.id %}Modificar{% else %}
+                                    Cadastrar{% endif %}</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

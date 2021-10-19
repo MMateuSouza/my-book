@@ -2,13 +2,12 @@ from django import forms
 from django.contrib.auth.models import Group
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm
 from django.utils.translation import gettext_lazy as _
 
 from users.models import User
 
 
-class UserForm(ModelForm):
+class UserForm(forms.ModelForm):
     error_messages = {
         'password_mismatch': _('As senhas fornecidas não coincidem.'),
     }

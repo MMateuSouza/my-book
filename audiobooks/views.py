@@ -1,15 +1,39 @@
+from constance import config
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import render
+
+from audiobooks.forms import BookForm
+from audiobooks.models import Book
 
 
 @login_required
 def index(request):
-    return render(request, template_name='audiobooks/index.html')
+    books_list = Book.objects.all().order_by('id')
+    paginator = Paginator(books_list, config.ELEMENTS_PER_PAGE)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, context={'page_obj': page_obj}, template_name='audiobooks/index.html')
 
 
 @login_required
-def create(request):
-    return render(request, template_name='audiobooks/create.html')
+def create(request, id=None):
+    book = Book.objects.get(id=id) if id else Book()
+
+    if request.method == 'GET':
+        form = BookForm(instance=book)
+    elif request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+
+        # if form.is_valid():
+        #     created_or_updated_msg = 'modificado' if user.id else 'criado'
+        #     form.save()
+        #     messages.success(request, f'Usuário {created_or_updated_msg} com sucesso!')
+        #     return redirect('users:index')
+        pass
+
+    return render(request, context=locals(), template_name='audiobooks/create.html')
 
 
 @login_required
