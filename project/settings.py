@@ -35,7 +35,6 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.spl
 # Application definition
 
 INSTALLED_APPS = [
-    'api.apps.ApiConfig',
     'audiobooks.apps.AudiobooksConfig',
     'constance.backends.database',
     'django.contrib.admin',
