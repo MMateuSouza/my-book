@@ -9,7 +9,7 @@ from users.models import User
 def create_default_administrator_credentials(apps, schema_editor):
     administrator = User(
         first_name='Administrador', last_name='de Sistemas', username=DEFAULT_ADMINISTRATOR_USERNAME,
-        email=DEFAULT_ADMINISTRATOR_EMAIL, is_staff=True, is_active=True
+        email=DEFAULT_ADMINISTRATOR_EMAIL, is_staff=True, is_superuser=True, is_active=True
     )
     administrator.set_password(DEFAULT_ADMINISTRATOR_PASSWORD)
     administrator.save()
