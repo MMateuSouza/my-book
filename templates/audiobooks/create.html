@@ -97,39 +97,44 @@
                                 </div>
                                 {% endif %}
                             </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <label for="formFileSm" class="form-label">Imagem do Livro</label>
+                                <input class="form-control form-control-sm" id="formFileSm" type="file">
+                            </div>
 
                             <div class="col-12">
                                 <label for="authors">Autores</label>
 
                                 <div class="row">
                                     <div class="col-6 mt-2">
-                                        <div class="input-group input-group-sm  mb-3">
-                                            <input type="text" class="form-control" id="author_name" name="author_name" placeholder="Nome do autor">
+                                        <div class="input-group input-group-sm has-validation mb-3">
+                                            <input type="text" class="form-control text-capitalize" id="author_name" name="author_name" placeholder="Nome do autor">
                                             <button class="btn btn-outline-secondary" type="button" id="add_author_name">
                                                 <i class="bi bi-plus"></i>
                                             </button>
+                                            <div class="invalid-feedback">
+                                                É preciso informar o nome do autor
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between col-6 mt-2">
-                                        <select class="form-select form-select-sm" id="authors_name_list" name="authors_name_list" multiple>
-                                            <option value="1">Autor 1</option>
-                                            <option value="1">Autor 2</option>
-                                            <option value="1">Autor ...</option>
-                                            <option value="1">Autor N</option>
-                                        </select>
+                                        <select class="form-select form-select-sm text-capitalize" id="authors_name_list" name="authors_name_list" multiple></select>
 
-                                        <button class="btn btn-sm btn-outline-secondary align-self-start disabled" type="button">
+                                        <button class="btn btn-sm btn-outline-secondary align-self-start" type="button" id="remove_author_name">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-12 col-lg-6">
                                 <label for="chapters">Capítulos</label>
 
-                                <ol class="list-group list-group-numbered mt-2"  id="chapters">
-                                </ol>
+                                <ol class="list-group list-group-numbered mt-2"  id="chapters"></ol>
+
+                                <div class="d-flex justify-content-end mt-2">
+                                    <button type="button" class="btn btn-sm btn-primary" id="add-chapter">Adicionar Capítulo</button>
+                                </div>
                             </div>
 
                             <div class="d-flex justify-content-end col-12">
@@ -145,4 +150,5 @@
 {% endblock %}
 
 {% block script %}
+<script src="{% static 'js/audiobooks/create.js' %}"></script>
 {% endblock %}
