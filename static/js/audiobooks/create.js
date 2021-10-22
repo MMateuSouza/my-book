@@ -13,6 +13,12 @@
   addAuthorButton.onclick = addNewAuthor;
   removeAuthorButton.onclick = removeAuthors;
   submitFormButton.onclick = (e) => validateFormBeforeSubmit(e);
+  authorNameInput.onkeypress = function(e) {
+    if (!e) e = window.event;
+    let keyCode = e.code || e.key;
+
+    keyCode == 'Enter' && addNewAuthor();
+  };
 
   function addNewAuthor() {
     let authorName = authorNameInput.value;
