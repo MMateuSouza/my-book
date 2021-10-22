@@ -5,6 +5,7 @@
   let authorsElement = document.querySelector('#authors_name_list');
   let authorNameInput = document.querySelector('#author_name');
   let authorsNameInput = document.querySelector('#authors_names');
+  let chaptersInput = document.querySelector('#chapters_str');
   let addAuthorButton = document.querySelector('#add_author_name');
   let removeAuthorButton = document.querySelector('#remove_author_name');
   let formElement = document.querySelector('#audiobook_form');
@@ -68,6 +69,9 @@
       isValid = false;
       authorNameInput.classList.add('is-invalid');
     }
+
+    // Se capítulos todos preenchidos
+    getConvertedChapter();
 
     isValid && formElement.submit();
   }
@@ -190,7 +194,8 @@
   function getConvertedChapter() {
     let orderListObject = document.querySelector('#chapters');
     let chapters = convertChapter(orderListObject.cloneNode(true));
-    console.log(chapters);
+
+    chaptersInput.value = JSON.stringify(chapters);
   }
 
   function getParentNode(event) {

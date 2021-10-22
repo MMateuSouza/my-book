@@ -6,11 +6,13 @@ from audiobooks.models import Book, BookAuthor, Chapter
 
 class BookForm(forms.ModelForm):
     authors_names = forms.CharField()
+    chapters_str = forms.CharField()
 
     class Meta:
         model = Book
         fields = ['title', 'publishing_company', 'edition',
-                  'isbn_10', 'isbn_13', 'front_cover', 'authors_names',]
+                  'isbn_10', 'isbn_13', 'front_cover', 'authors_names',
+                  'chapters_str',]
 
         error_messages = {
             'title': {
@@ -41,6 +43,11 @@ class BookForm(forms.ModelForm):
             authors_names_lst = authors_names.split(';')
 
         return authors_names_lst
+
+    def clean_chapters_str(self):
+        chapters_str = self.cleaned_data.get('chapters_str')
+        # TODO: Converter para dict
+        return chapters_str
 
     def save(self):
         super().save()

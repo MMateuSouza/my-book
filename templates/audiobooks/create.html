@@ -130,7 +130,7 @@
                                         <div class="form-text m-0">
                                             Pressione `Enter` para adicionar
                                         </div>
-                                        <input type="text" class="d-none" id="authors_names" name="authors_names">
+                                        <input type="text" class="d-none" id="{{ form.authors_names.html_name }}" name="{{ form.authors_names.html_name }}">
                                     </div>
                                     <div class="d-flex justify-content-between col-6 mt-2">
                                         <select class="form-select form-select-sm text-capitalize" id="authors_name_list" name="authors_name_list" multiple></select>
@@ -150,6 +150,7 @@
                                 <div class="d-flex justify-content-end mt-2">
                                     <button type="button" class="btn btn-sm btn-primary" id="add-chapter">Adicionar Capítulo</button>
                                 </div>
+                                <input type="text" id="{{ form.chapters_str.html_name }}" name="{{ form.chapters_str.html_name }}" value="{% if form.chapters_str.value %}{{ form.chapters_str.value }}{% endif %}">
                             </div>
 
                             <div class="d-flex justify-content-end col-12">
