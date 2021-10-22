@@ -10,9 +10,9 @@
   let formElement = document.querySelector('#audiobook_form');
   let submitFormButton = document.querySelector('#submit_form');
 
-  addAuthorButton.addEventListener('click', () => addNewAuthor());
-  removeAuthorButton.addEventListener('click', () => removeAuthors());
-  submitFormButton.addEventListener('click', (e) => validateFormBeforeSubmit(e));
+  addAuthorButton.onclick = addNewAuthor;
+  removeAuthorButton.onclick = removeAuthors;
+  submitFormButton.onclick = (e) => validateFormBeforeSubmit(e);
 
   function addNewAuthor() {
     let authorName = authorNameInput.value;
@@ -78,7 +78,7 @@
     addNewChapter();
   }
 
-  addChappterButton.addEventListener('click', () => addNewChapter());
+  addChappterButton.onclick = addNewChapter;
 
   function createElement(tag, classList) {
     if (typeof tag !== 'string' || typeof classList !== 'object') {
@@ -106,6 +106,7 @@
   function getButtonWithIcon(iconClass) {
     let icon = createElement('i', ['bi', iconClass]);
     let button = createElement('button', ['btn', 'btn-outline-secondary']);
+    button.type = 'button';
     button.append(icon);
 
     return button;
