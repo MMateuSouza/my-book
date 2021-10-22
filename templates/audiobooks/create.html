@@ -17,7 +17,7 @@
                         <a class="btn btn-sm btn-secondary" href="{% url 'audiobooks:index' %}">Voltar</a>
                     </div>
                     <div class="card-body">
-                        <form method="POST" class="row g-3">
+                        <form id="audiobook_form" method="POST" enctype="multipart/form-data" class="row g-3">
                             {% csrf_token %}
                             <div class="col-md-12 col-lg-7">
                                 <label for="{{ form.title.id_for_label }}"
@@ -54,7 +54,7 @@
                             <div class="col-2 col-md-1 col-lg-1">
                                 <label for="{{ form.edition.id_for_label }}"
                                        class="form-label">{{ form.edition.label }}</label>
-                                <input type="text" class="form-control form-control-sm text-lowercase {% if form.edition.errors %}is-invalid{% endif %}"
+                                <input type="number" class="form-control form-control-sm text-lowercase {% if form.edition.errors %}is-invalid{% endif %}"
                                        id="{{ form.edition.id_for_label }}"
                                        maxlength="{{ form.fields.edition.max_length }}"
                                        name="{{ form.edition.html_name }}"
@@ -98,8 +98,19 @@
                                 {% endif %}
                             </div>
                             <div class="col-12 col-md-6 col-lg-4">
-                                <label for="formFileSm" class="form-label">Imagem do Livro</label>
-                                <input class="form-control form-control-sm" id="formFileSm" type="file">
+                                <label for="{{ form.front_cover.id_for_label }}"
+                                       class="form-label">{{ form.front_cover.label }}</label>
+                                <input type="file" class="form-control form-control-sm text-lowercase {% if form.front_cover.errors %}is-invalid{% endif %}"
+                                       id="{{ form.front_cover.id_for_label }}" maxlength="{{ form.fields.front_cover.max_length }}"
+                                       name="{{ form.front_cover.html_name }}"
+                                       value="{% if form.front_cover.value %}{{ form.front_cover.value }}{% endif %}">
+                                {% if form.front_cover.errors %}
+                                <div class="invalid-feedback">
+                                {% for error in form.front_cover.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                                </div>
+                                {% endif %}
                             </div>
 
                             <div class="col-12">
@@ -138,7 +149,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end col-12">
-                                <button type="submit" class="btn btn-sm btn-primary">{% if book.id %}Modificar{% else %}
+                                <button type="button" class="btn btn-sm btn-primary" id="submit_form">{% if book.id %}Modificar{% else %}
                                     Cadastrar{% endif %}</button>
                             </div>
                         </form>

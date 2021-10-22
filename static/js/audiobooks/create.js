@@ -5,16 +5,19 @@
   let authorsElement = document.querySelector('#authors_name_list');
   let addAuthorButton = document.querySelector('#add_author_name');
   let removeAuthorButton = document.querySelector('#remove_author_name');
+  let formElement = document.querySelector('#audiobook_form');
+  let submitFormButton = document.querySelector('#submit_form');
 
   addAuthorButton.addEventListener('click', () => addNewAuthor());
   removeAuthorButton.addEventListener('click', () => removeAuthors());
+  submitFormButton.addEventListener('click', (e) => validateFormBeforeSubmit(e));
 
   function addNewAuthor() {
     let authorNameInput = document.querySelector('#author_name');
     let authorName = authorNameInput.value;
     let inputContainsIsInvalidClass = authorNameInput.classList.contains('is-invalid');
 
-    if(!authorName) {
+    if (!authorName) {
       // Se já houver a classe, não adicioná-la
       !inputContainsIsInvalidClass && authorNameInput.classList.add('is-invalid');
       return;
@@ -33,9 +36,15 @@
   }
 
   function removeAuthors() {
-    if(confirm('Você deseja remover o(s) autore(s)?')) {
+    if (confirm('Você deseja remover o(s) autore(s)?')) {
       authorsElement.querySelectorAll('option:checked').forEach((opt) => opt.remove());
     }
+  }
+
+  function validateFormBeforeSubmit(e) {
+    e.preventDefault();
+
+    formElement.submit();
   }
 
   /*
@@ -126,6 +135,36 @@
   function addNewChapter() {
     let listItemElement = createListItemElement();
     chaptersObject.append(listItemElement);
+  }
+
+  function convertChapter(element) {
+    let chapters = [];
+    let orderedListElement = element;
+
+    let listItem = orderedListElement.querySelector('li:first-child');
+
+    while (listItem) {
+      let insideOrderedListElement = listItem.querySelector('ol');
+      let subchapters = convertChapter(insideOrderedListElement);
+
+      let chapterInputElement = listItem.querySelector('input');
+      let chapterTitle = chapterInputElement.value;
+      let chapter = {};
+      chapter.title = chapterTitle;
+      chapter.subchapters = subchapters;
+      chapters.push(chapter);
+
+      listItem.remove();
+      listItem = orderedListElement.querySelector('li:first-child');
+    }
+
+    return chapters;
+  }
+
+  function getConvertedChapter() {
+    let orderListObject = document.querySelector('#chapters');
+    let chapters = convertChapter(orderListObject.cloneNode(true));
+    console.log(chapters);
   }
 
   function getParentNode(event) {

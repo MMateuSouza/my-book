@@ -32,29 +32,31 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr class="text-center">
-                                <td>1</td>
-                                <td class="text-capitalize">O Menino que Tinha Medo de Errar</td>
-                                <td class="text-capitalize">Zit</td>
-                                <td class="text-capitalize">Taubman Andrea Viviana</td>
-                                <td>1ª</td>
-                                <td>8579330890</td>
-                                <td>978-8579330896</td>
-                                <td>X</td>
-                                <td>
-                                    <div class="d-grid gap-2 d-md-block">
-                                        <a href="{% url 'audiobooks:recording' %}" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-mic"></i>
-                                        </a>
-                                        <a href="{% url 'audiobooks:create' %}" class="btn btn-sm btn-outline-warning">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                            {% for book in page_obj %}
+                                <tr class="text-center">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td class="text-capitalize">{{ book.title }}</td>
+                                    <td class="text-capitalize">{{ book.publishing_company }}</td>
+                                    <td class="text-capitalize">{{ book.authors }}</td>
+                                    <td>{{ book.edition }}ª</td>
+                                    <td>{{ book.isbn_10 }}</td>
+                                    <td>{{ book.isbn_13 }}</td>
+                                    <td>X</td>
+                                    <td>
+                                        <div class="d-grid gap-2 d-md-block">
+                                            <a href="{% url 'audiobooks:recording' %}" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-mic"></i>
+                                            </a>
+                                            <a href="{% url 'audiobooks:change' book.id %}" class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                         <nav aria-label="Page navigation example">

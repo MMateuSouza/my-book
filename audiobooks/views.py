@@ -1,7 +1,8 @@
 from constance import config
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from audiobooks.forms import BookForm
 from audiobooks.models import Book
@@ -24,14 +25,13 @@ def create(request, id=None):
     if request.method == 'GET':
         form = BookForm(instance=book)
     elif request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
+        form = BookForm(request.POST, request.FILES, instance=book)
 
-        # if form.is_valid():
-        #     created_or_updated_msg = 'modificado' if user.id else 'criado'
-        #     form.save()
-        #     messages.success(request, f'Usuário {created_or_updated_msg} com sucesso!')
-        #     return redirect('users:index')
-        pass
+        if form.is_valid():
+            created_or_updated_msg = 'modificado' if book.id else 'criado'
+            form.save()
+            messages.success(request, f'Livro {created_or_updated_msg} com sucesso!')
+            return redirect('audiobooks:index')
 
     return render(request, context=locals(), template_name='audiobooks/create.html')
 

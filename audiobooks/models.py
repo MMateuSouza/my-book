@@ -11,8 +11,13 @@ class Book(models.Model):
     publishing_company = models.CharField(verbose_name='Editora', max_length=64)
     edition = models.PositiveIntegerField(verbose_name='Edição')
     isbn_10 = models.CharField(verbose_name='ISBN 10', max_length=10)
-    isbn_13 = models.CharField(verbose_name='ISBN 13', max_length=10)
+    isbn_13 = models.CharField(verbose_name='ISBN 13', max_length=13)
+    front_cover = models.ImageField(verbose_name='Foto de Capa', upload_to='front_cover')
 
+    @property
+    def authors(self):
+        authors = BookAuthor.objects.filter(book=self)
+        return ''.join([author.name for author in authors])
 
 class BookAuthor(models.Model):
     book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', on_delete=models.CASCADE)
