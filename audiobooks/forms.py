@@ -5,9 +5,12 @@ from audiobooks.models import Book, BookAuthor, Chapter
 
 
 class BookForm(forms.ModelForm):
+    authors_names = forms.CharField()
+
     class Meta:
         model = Book
-        fields = ['title', 'publishing_company', 'edition', 'isbn_10', 'isbn_13', 'front_cover']
+        fields = ['title', 'publishing_company', 'edition',
+                  'isbn_10', 'isbn_13', 'front_cover', 'authors_names',]
 
         error_messages = {
             'title': {
@@ -29,6 +32,22 @@ class BookForm(forms.ModelForm):
                 'required': 'Foto de capa é um campo obrigatório'
             },
         }
+
+    def clean_authors_names(self):
+        authors_names = self.cleaned_data.get("authors_names")
+        authors_names_lst = []
+
+        if authors_names:
+            authors_names_lst = authors_names.split(';')
+
+        return authors_names_lst
+
+    def save(self):
+        super().save()
+
+        authors_names = self.cleaned_data.get('authors_names')
+        for author_name in authors_names:
+            BookAuthor(book=self.instance, name=author_name).save()
 
 
 class BookAuthorForm(forms.ModelForm):

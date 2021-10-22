@@ -3,6 +3,8 @@
   *  Início - Autores
   */
   let authorsElement = document.querySelector('#authors_name_list');
+  let authorNameInput = document.querySelector('#author_name');
+  let authorsNameInput = document.querySelector('#authors_names');
   let addAuthorButton = document.querySelector('#add_author_name');
   let removeAuthorButton = document.querySelector('#remove_author_name');
   let formElement = document.querySelector('#audiobook_form');
@@ -13,7 +15,6 @@
   submitFormButton.addEventListener('click', (e) => validateFormBeforeSubmit(e));
 
   function addNewAuthor() {
-    let authorNameInput = document.querySelector('#author_name');
     let authorName = authorNameInput.value;
     let inputContainsIsInvalidClass = authorNameInput.classList.contains('is-invalid');
 
@@ -31,6 +32,7 @@
     optionElement.value = authorName;
 
     authorsElement.append(optionElement);
+    fillAuthorsNames();
     authorNameInput.value = '';
     authorNameInput.focus();
   }
@@ -38,13 +40,30 @@
   function removeAuthors() {
     if (confirm('Você deseja remover o(s) autore(s)?')) {
       authorsElement.querySelectorAll('option:checked').forEach((opt) => opt.remove());
+      fillAuthorsNames();
     }
+  }
+
+  function fillAuthorsNames() {
+    let authorsNames = [];
+
+    authorsElement.querySelectorAll('option').forEach((el) => {
+      authorsNames.push(el.value.trim().toLowerCase());
+    });
+
+    authorsNameInput.value = authorsNames.join(';');
   }
 
   function validateFormBeforeSubmit(e) {
     e.preventDefault();
+    let isValid = true;
 
-    formElement.submit();
+    if (!authorsNameInput.value) {
+      isValid = false;
+      authorNameInput.classList.add('is-invalid');
+    }
+
+    isValid && formElement.submit();
   }
 
   /*
