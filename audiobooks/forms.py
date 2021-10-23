@@ -52,9 +52,15 @@ class BookForm(forms.ModelForm):
     def save(self):
         super().save()
 
+        stored_authors_names = self.instance.authors_lst
         authors_names = self.cleaned_data.get('authors_names')
         for author_name in authors_names:
-            BookAuthor(book=self.instance, name=author_name).save()
+            if author_name not in stored_authors_names:
+                BookAuthor(book=self.instance, name=author_name).save()
+
+        deleted_authors = [_ for _ in stored_authors_names if _ not in authors_names]
+        for deleted_author in deleted_authors:
+            BookAuthor.objects.filter(book=self.instance, name=deleted_author).delete()
 
 
 class BookAuthorForm(forms.ModelForm):

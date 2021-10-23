@@ -2,6 +2,7 @@
   /*
   *  Início - Autores
   */
+  let isNewBook = document.querySelector('#is-new-book').checked
   let authorsElement = document.querySelector('#authors_name_list');
   let authorNameInput = document.querySelector('#author_name');
   let authorsNameInput = document.querySelector('#authors_names');
@@ -65,6 +66,7 @@
     e.preventDefault();
     let isValid = true;
 
+    !isNewBook && fillAuthorsNames();
     if (!authorsNameInput.value) {
       isValid = false;
       authorNameInput.classList.add('is-invalid');

@@ -19,6 +19,7 @@
                     <div class="card-body">
                         <form id="audiobook_form" method="POST" enctype="multipart/form-data" class="row g-3">
                             {% csrf_token %}
+                            <input class="d-none" type="checkbox" id="is-new-book" name="is-new-book" {% if not book.id %}checked{% endif %}>
                             <div class="col-md-12 col-lg-7">
                                 <label for="{{ form.title.id_for_label }}"
                                        class="form-label">{{ form.title.label }}</label>
@@ -133,7 +134,11 @@
                                         <input type="text" class="d-none" id="{{ form.authors_names.html_name }}" name="{{ form.authors_names.html_name }}">
                                     </div>
                                     <div class="d-flex justify-content-between col-6 mt-2">
-                                        <select class="form-select form-select-sm text-capitalize" id="authors_name_list" name="authors_name_list" multiple></select>
+                                        <select class="form-select form-select-sm text-capitalize" id="authors_name_list" name="authors_name_list" multiple>
+                                            {% for author in book.authors_lst %}
+                                            <option value="{{ author }}">{{ author }}</option>
+                                            {% endfor %}
+                                        </select>
 
                                         <button class="btn btn-sm btn-outline-secondary align-self-start" type="button" id="remove_author_name">
                                             <i class="bi bi-trash"></i>

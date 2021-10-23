@@ -15,9 +15,14 @@ class Book(models.Model):
     front_cover = models.ImageField(verbose_name='Foto de Capa', upload_to='front_cover')
 
     @property
-    def authors(self):
+    def authors_lst(self):
         authors = BookAuthor.objects.filter(book=self)
-        return ''.join([author.name for author in authors])
+        return [author.name for author in authors]
+
+    @property
+    def authors(self):
+        return ', '.join(self.authors_lst)
+
 
 class BookAuthor(models.Model):
     book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', on_delete=models.CASCADE)
