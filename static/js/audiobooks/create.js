@@ -83,11 +83,12 @@
   */
 
   let chaptersObject = document.querySelector('#chapters');
-  let chaptersQuantity = chaptersObject.querySelectorAll('li');
   let addChappterButton = document.querySelector('#add-chapter');
 
-  if (chaptersQuantity.length === 0) {
+  if (isNewBook) {
     addNewChapter();
+  } else {
+    // TODO: Recuperar assíncronamente os capítulos do livro
   }
 
   addChappterButton.onclick = addNewChapter;
