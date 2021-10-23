@@ -35,6 +35,22 @@ class Book(models.Model):
 
         return json.loads(chapters_str)
 
+    @staticmethod
+    def persist_chapters(chapters=[]):
+        chapters_instances = subchapters_instances = []
+
+        for chapter in chapters:
+            subchapters = chapter['subchapters'] if 'subchapters' in chapter else []
+            if subchapters:
+                subchapters_instances, _ = Book.persist_chapters(subchapters)
+                chapters_instances += _
+
+            # `chapter_desc` simula a instância de um capítulo
+            chapter_desc = chapter['title'] if 'title' in chapter else ''
+            # Após criar uma instância será preciso adicionar todas as `subinstâncias` do capítulo à ele
+            chapters_instances.append(chapter_desc)
+        return subchapters_instances, chapters_instances
+
 
 class BookAuthor(models.Model):
     book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', on_delete=models.CASCADE)
