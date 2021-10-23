@@ -46,11 +46,12 @@ class BookForm(forms.ModelForm):
 
     def clean_chapters_str(self):
         chapters_str = self.cleaned_data.get('chapters_str')
-        # TODO: Converter para dict
-        return chapters_str
+        return Book.convert_chapters_str_to_json(chapters_str)
 
     def save(self):
         super().save()
+
+        # Persistência de Autores
 
         stored_authors_names = self.instance.authors_lst
         authors_names = self.cleaned_data.get('authors_names')
@@ -61,6 +62,12 @@ class BookForm(forms.ModelForm):
         deleted_authors = [_ for _ in stored_authors_names if _ not in authors_names]
         for deleted_author in deleted_authors:
             BookAuthor.objects.filter(book=self.instance, name=deleted_author).delete()
+
+        # Persistência de Capítulos
+
+        chapters_dict = self.cleaned_data.get('chapters_str')
+        print(chapters_dict)
+
 
 
 class BookAuthorForm(forms.ModelForm):

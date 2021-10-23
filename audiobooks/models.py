@@ -1,5 +1,6 @@
 from django.db import models
 
+import json
 
 # TODO: Verificar quais campos serão adicionados para instância AudioBook
 # class AudioBook(models.Model):
@@ -22,6 +23,17 @@ class Book(models.Model):
     @property
     def authors(self):
         return ', '.join(self.authors_lst)
+
+    @property
+    def chapters_quantity(self):
+        pass
+
+    @staticmethod
+    def convert_chapters_str_to_json(chapters_str):
+        if not chapters_str:
+            return
+
+        return json.loads(chapters_str)
 
 
 class BookAuthor(models.Model):
