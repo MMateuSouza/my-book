@@ -57,7 +57,7 @@
                                        class="form-label">{{ form.edition.label }}</label>
                                 <input type="number" class="form-control form-control-sm text-lowercase {% if form.edition.errors %}is-invalid{% endif %}"
                                        id="{{ form.edition.id_for_label }}"
-                                       maxlength="{{ form.fields.edition.max_length }}"
+                                       min="0"
                                        name="{{ form.edition.html_name }}"
                                        value="{% if form.edition.value %}{{ form.edition.value }}{% endif %}">
                                 {% if form.edition.errors %}
@@ -71,7 +71,7 @@
                             <div class="col-6 col-md-6 col-lg-4">
                                 <label for="{{ form.isbn_10.id_for_label }}"
                                        class="form-label">{{ form.isbn_10.label }}</label>
-                                <input type="email" class="form-control form-control-sm text-lowercase {% if form.isbn_10.errors %}is-invalid{% endif %}"
+                                <input type="text" class="form-control form-control-sm text-lowercase {% if form.isbn_10.errors %}is-invalid{% endif %}"
                                        id="{{ form.isbn_10.id_for_label }}" maxlength="{{ form.fields.isbn_10.max_length }}"
                                        name="{{ form.isbn_10.html_name }}"
                                        value="{% if form.isbn_10.value %}{{ form.isbn_10.value }}{% endif %}">
@@ -86,7 +86,7 @@
                             <div class="col-6 col-md-6 col-lg-4">
                                 <label for="{{ form.isbn_13.id_for_label }}"
                                        class="form-label">{{ form.isbn_13.label }}</label>
-                                <input type="email" class="form-control form-control-sm text-lowercase {% if form.isbn_13.errors %}is-invalid{% endif %}"
+                                <input type="text" class="form-control form-control-sm text-lowercase {% if form.isbn_13.errors %}is-invalid{% endif %}"
                                        id="{{ form.isbn_13.id_for_label }}" maxlength="{{ form.fields.isbn_13.max_length }}"
                                        name="{{ form.isbn_13.html_name }}"
                                        value="{% if form.isbn_13.value %}{{ form.isbn_13.value }}{% endif %}">
