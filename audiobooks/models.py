@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 
 import json
@@ -36,19 +37,22 @@ class Book(models.Model):
         return json.loads(chapters_str)
 
     @staticmethod
-    def persist_chapters(chapters=[]):
+    def persist_chapters(chapters=[], main=True):
         chapters_instances = subchapters_instances = []
 
         for chapter in chapters:
             subchapters = chapter['subchapters'] if 'subchapters' in chapter else []
             if subchapters:
-                subchapters_instances, _ = Book.persist_chapters(subchapters)
+                subchapters_instances, _ = Book.persist_chapters(subchapters, False)
                 chapters_instances += _
 
-            # `chapter_desc` simula a instância de um capítulo
-            chapter_desc = chapter['title'] if 'title' in chapter else ''
-            # Após criar uma instância será preciso adicionar todas as `subinstâncias` do capítulo à ele
-            chapters_instances.append(chapter_desc)
+            title = chapter['title'] if 'title' in chapter else ''
+            chapter_instance = Chapter(title=title, main=main)
+            chapter_instance.save()
+            for subchapter_instance in subchapters_instances:
+                chapter_instance.subchapters.add(subchapter_instance)
+
+            chapters_instances.append(chapter_instance)
         return subchapters_instances, chapters_instances
 
 
@@ -56,8 +60,15 @@ class BookAuthor(models.Model):
     book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Autor', max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 class Chapter(models.Model):
-    book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', on_delete=models.CASCADE)
+    book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', null=True, on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Título', max_length=255)
+    main = models.BooleanField(verbose_name='Principal')
     subchapters = models.ManyToManyField(verbose_name='Subcapítulos', to='self', blank=True)
+
+    def __str__(self):
+        return self.title

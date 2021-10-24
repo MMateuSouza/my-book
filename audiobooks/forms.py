@@ -1,7 +1,4 @@
-from django import forms
-from django.db.models import fields
-
-from audiobooks.models import Book, BookAuthor, Chapter
+from audiobooks.models import Book, BookAuthor, Chapter, forms
 
 
 class BookForm(forms.ModelForm):
@@ -68,17 +65,12 @@ class BookForm(forms.ModelForm):
         chapters_dict = self.cleaned_data.get('chapters_str')
         _, persisted_chapters = Book.persist_chapters(chapters_dict)
 
-        # TODO: Adicionar loop para adicionar `book=self.instance` e executar `.save(commit=True)`
-        print(persisted_chapters)
+        for persisted_chapter in persisted_chapters:
+            persisted_chapter.book = self.instance
+            persisted_chapter.save()
 
 
 class BookAuthorForm(forms.ModelForm):
     class Meta:
         model = BookAuthor
         fields = ['name']
-
-
-class ChapterForm(forms.ModelForm):
-    class Meta:
-        model = Chapter
-        fields = ['title']
