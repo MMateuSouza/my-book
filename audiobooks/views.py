@@ -12,10 +12,11 @@ from audiobooks.models import Book
 def index(request):
     books_list = Book.objects.all().order_by('id')
     paginator = Paginator(books_list, config.ELEMENTS_PER_PAGE)
+    has_books = paginator.count != 0
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, context={'page_obj': page_obj}, template_name='audiobooks/index.html')
+    return render(request, context={'page_obj': page_obj, 'has_books': has_books}, template_name='audiobooks/index.html')
 
 
 @login_required

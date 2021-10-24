@@ -32,6 +32,7 @@
                             </tr>
                             </thead>
                             <tbody>
+                            {% if has_books %}
                             {% for book in page_obj %}
                                 <tr class="text-center">
                                     <td>{{ forloop.counter }}</td>
@@ -41,7 +42,7 @@
                                     <td>{{ book.edition }}ª</td>
                                     <td>{{ book.isbn_10 }}</td>
                                     <td>{{ book.isbn_13 }}</td>
-                                    <td>X</td>
+                                    <td>{{ book.chapters_quantity }}</td>
                                     <td>
                                         <div class="d-grid gap-2 d-md-block">
                                             <a href="{% url 'audiobooks:recording' %}" class="btn btn-sm btn-outline-primary">
@@ -57,6 +58,11 @@
                                     </td>
                                 </tr>
                             {% endfor %}
+                            {% else %}
+                                <tr class="text-center">
+                                    <td colspan="9">Não há livros cadastrados</td>
+                                </tr>
+                            {% endif %}
                             </tbody>
                         </table>
                         <nav aria-label="Page navigation example">

@@ -27,7 +27,8 @@ class Book(models.Model):
 
     @property
     def chapters_quantity(self):
-        pass
+        # Contabiliza apenas capítulos principais/raíz
+        return Chapter.objects.filter(book=self, main=True).count()
 
     @staticmethod
     def convert_chapters_str_to_json(chapters_str):
