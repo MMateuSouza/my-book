@@ -16,6 +16,9 @@ class Book(models.Model):
     isbn_13 = models.CharField(verbose_name='ISBN 13', max_length=13)
     front_cover = models.ImageField(verbose_name='Foto de Capa', upload_to='front_cover')
 
+    def __str__(self):
+        return self.title
+
     @property
     def authors_lst(self):
         authors = BookAuthor.objects.filter(book=self)
@@ -26,9 +29,32 @@ class Book(models.Model):
         return ', '.join(self.authors_lst)
 
     @property
+    def main_chapters(self):
+        return Chapter.objects.filter(book=self, main=True)
+
+    @property
     def chapters_quantity(self):
         # Contabiliza apenas capítulos principais/raíz
-        return Chapter.objects.filter(book=self, main=True).count()
+        return self.main_chapters.count()
+
+    @property
+    def chapters_str(self):
+        return Book.convert_chapters_obj_to_json(self.main_chapters)
+
+    @staticmethod
+    def convert_chapters_obj_to_json(chapters_obj):
+        chapters_json = []
+
+        for chapter_obj in chapters_obj:
+            chapter_dict = dict()
+            chapter_dict.update({ 'id': chapter_obj.id })
+            chapter_dict.update({ 'title': chapter_obj.title })
+            subchapters = Book.convert_chapters_obj_to_json(chapter_obj.subchapters.all())
+            chapter_dict.update({ 'subchapters': subchapters })
+
+            chapters_json.append(chapter_dict)
+
+        return chapters_json
 
     @staticmethod
     def convert_chapters_str_to_json(chapters_str):
@@ -38,24 +64,25 @@ class Book(models.Model):
         return json.loads(chapters_str)
 
     @staticmethod
-    def persist_chapters(chapters=[], main=True):
-        chapters_instances = subchapters_instances = []
+    def persist_chapters(book, chapters=[], main=True):
+        chapters_instances = []
 
         for chapter in chapters:
             subchapters = chapter['subchapters'] if 'subchapters' in chapter else []
+            subchapters_instances = []
+
             if subchapters:
-                subchapters_instances, _ = Book.persist_chapters(subchapters, False)
-                chapters_instances += _
+                subchapters_instances = Book.persist_chapters(book, subchapters, False)
 
             title = chapter['title'] if 'title' in chapter else ''
-            chapter_instance = Chapter(title=title, main=main)
+            chapter_instance = Chapter(book=book, title=title, main=main)
             chapter_instance.save()
 
             for subchapter_instance in subchapters_instances:
                 chapter_instance.subchapters.add(subchapter_instance)
 
             chapters_instances.append(chapter_instance)
-        return subchapters_instances, chapters_instances
+        return chapters_instances
 
 
 class BookAuthor(models.Model):
@@ -70,7 +97,7 @@ class Chapter(models.Model):
     book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', null=True, on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Título', max_length=255)
     main = models.BooleanField(verbose_name='Principal')
-    subchapters = models.ManyToManyField(verbose_name='Subcapítulos', to='self', blank=True)
+    subchapters = models.ManyToManyField(verbose_name='Subcapítulos', to='self', blank=True, symmetrical=False)
 
     def __str__(self):
         return self.title

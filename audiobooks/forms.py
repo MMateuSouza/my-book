@@ -63,8 +63,4 @@ class BookForm(forms.ModelForm):
         # Persistência de Capítulos
 
         chapters_dict = self.cleaned_data.get('chapters_str')
-        _, persisted_chapters = Book.persist_chapters(chapters_dict)
-
-        for persisted_chapter in persisted_chapters:
-            persisted_chapter.book = self.instance
-            persisted_chapter.save()
+        Book.persist_chapters(self.instance, chapters_dict)
