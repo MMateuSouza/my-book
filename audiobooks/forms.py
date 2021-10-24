@@ -68,9 +68,3 @@ class BookForm(forms.ModelForm):
         for persisted_chapter in persisted_chapters:
             persisted_chapter.book = self.instance
             persisted_chapter.save()
-
-
-class BookAuthorForm(forms.ModelForm):
-    class Meta:
-        model = BookAuthor
-        fields = ['name']

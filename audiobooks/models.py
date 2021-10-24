@@ -49,6 +49,7 @@ class Book(models.Model):
             title = chapter['title'] if 'title' in chapter else ''
             chapter_instance = Chapter(title=title, main=main)
             chapter_instance.save()
+
             for subchapter_instance in subchapters_instances:
                 chapter_instance.subchapters.add(subchapter_instance)
 
