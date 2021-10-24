@@ -30,6 +30,7 @@
                             </tr>
                             </thead>
                             <tbody>
+                            {% if has_users %}
                             {% for user in page_obj %}
                                 <tr class="text-center">
                                     <td>{{ forloop.counter }}</td>
@@ -56,6 +57,11 @@
                                     </td>
                                 </tr>
                             {% endfor %}
+                            {% else %}
+                                <tr class="text-center">
+                                    <td colspan="7">Não há usuários cadastrados</td>
+                                </tr>
+                            {% endif %}
                             </tbody>
                         </table>
                         <nav aria-label="Page navigation example">

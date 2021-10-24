@@ -13,10 +13,11 @@ from users.models import User
 def index(request):
     users_list = User.objects.all().order_by('id')
     paginator = Paginator(users_list, config.ELEMENTS_PER_PAGE)
+    has_users = paginator.count != 0
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, context={'page_obj': page_obj}, template_name='users/index.html')
+    return render(request, context={'page_obj': page_obj, 'has_users': has_users}, template_name='users/index.html')
 
 
 @login_required
