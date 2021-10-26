@@ -15,7 +15,7 @@
   addAuthorButton.onclick = addNewAuthor;
   removeAuthorButton.onclick = removeAuthors;
   submitFormButton.onclick = (e) => validateFormBeforeSubmit(e);
-  authorNameInput.onkeypress = function(e) {
+  authorNameInput.onkeypress = function (e) {
     if (!e) e = window.event;
     let keyCode = e.code || e.key;
 
@@ -88,7 +88,7 @@
   if (isNewBook) {
     addNewChapter();
   } else {
-    // TODO: Recuperar assíncronamente os capítulos do livro
+    loadChapters();
   }
 
   addChappterButton.onclick = addNewChapter;
@@ -169,6 +169,47 @@
     let listItemElement = createListItemElement();
     chaptersObject.append(listItemElement);
   }
+
+  // TODO: INÍCIO - Rever o que poder ser simplificado
+
+  function convertChaptersToHTML(chapters) {
+    let listItemElements = [];
+
+    chapters.forEach(function (chapter) {
+      let subchaptersListItemElements;
+
+      if (chapter.subchapters) {
+        subchaptersListItemElements = convertChaptersToHTML(chapter.subchapters);
+      }
+
+      let listItemElement = createListItemElement();
+      listItemElement.querySelector('input').value = chapter.title;
+      listItemElements.push(listItemElement);
+
+      if (subchaptersListItemElements) {
+        let subchaptersElement = listItemElement.querySelector('ol');
+        subchaptersListItemElements.forEach((el) => subchaptersElement.append(el));
+      }
+    });
+
+    return listItemElements;
+  }
+
+  function loadChapters() {
+    let chaptersString = chaptersInput.value;
+    chaptersString = chaptersString.replace(/'/g, '"');
+    let chapters = JSON.parse(chaptersString);
+
+    if (!chapters) {
+      addNewChapter();
+      return;
+    }
+
+    let chaptersElements = convertChaptersToHTML(chapters);
+    chaptersElements.forEach((el) => chaptersObject.append(el));
+  }
+
+   // TODO: FIM - Rever o que poder ser simplificado
 
   function convertChapter(element) {
     let chapters = [];
