@@ -7,6 +7,7 @@
   let authorNameInput = document.querySelector('#author_name');
   let authorsNameInput = document.querySelector('#authors_names');
   let chaptersInput = document.querySelector('#chapters_str');
+  let hasChapters = !!chaptersInput.value && chaptersInput.value !== '[]';
   let addAuthorButton = document.querySelector('#add_author_name');
   let removeAuthorButton = document.querySelector('#remove_author_name');
   let formElement = document.querySelector('#audiobook_form');
@@ -85,7 +86,7 @@
   let chaptersObject = document.querySelector('#chapters');
   let addChappterButton = document.querySelector('#add-chapter');
 
-  if (isNewBook) {
+  if (isNewBook && !hasChapters) {
     addNewChapter();
   } else {
     loadChapters();
@@ -114,6 +115,15 @@
 
   function getInputElement() {
     return createElement('input', ['form-control', 'text-capitalize']);
+  }
+
+  function getChapterIdInputElement() {
+    let inputElement = getInputElement();
+    inputElement.type = 'number';
+    inputElement.name = 'chapter-id';
+    inputElement.classList.add('d-none');
+
+    return inputElement;
   }
 
   function getButtonWithIcon(iconClass) {
@@ -151,11 +161,13 @@
   function createListItemElement() {
     let listItemElement = getListItemElement();
     let divElement = getDivElement();
+    let inputChapterIdElement = getChapterIdInputElement();
     let inputTitleElement = getInputElement();
     let removeButtonElement = getRemoveButtonElement();
     let addButtonElement = getAddButtonElement();
     let orderedListElement = getOrderedListElement();
 
+    divElement.append(inputChapterIdElement);
     divElement.append(inputTitleElement);
     divElement.append(removeButtonElement);
     divElement.append(addButtonElement);
@@ -183,7 +195,8 @@
       }
 
       let listItemElement = createListItemElement();
-      listItemElement.querySelector('input').value = chapter.title;
+      listItemElement.querySelector('input[type="number"]').value = chapter.id;
+      listItemElement.querySelector('input:not([type="number"])').value = chapter.title;
       listItemElements.push(listItemElement);
 
       if (subchaptersListItemElements) {
@@ -221,9 +234,11 @@
       let insideOrderedListElement = listItem.querySelector('ol');
       let subchapters = convertChapter(insideOrderedListElement);
 
-      let chapterInputElement = listItem.querySelector('input');
+      let chapterIdInputElement = listItem.querySelector('input[type="number"]');
+      let chapterInputElement = listItem.querySelector('input:not([type="number"])');
       let chapterTitle = chapterInputElement.value;
       let chapter = {};
+      chapter.id = chapterIdInputElement.value;
       chapter.title = chapterTitle;
       chapter.subchapters = subchapters;
       chapters.push(chapter);
