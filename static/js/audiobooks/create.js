@@ -6,6 +6,7 @@
   let authorsElement = document.querySelector('#authors_name_list');
   let authorNameInput = document.querySelector('#author_name');
   let authorsNameInput = document.querySelector('#authors_names');
+  let hasAuthors = !!authorsNameInput.value;
   let chaptersInput = document.querySelector('#chapters_str');
   let hasChapters = !!chaptersInput.value && chaptersInput.value !== '[]';
   let addAuthorButton = document.querySelector('#add_author_name');
@@ -23,8 +24,13 @@
     keyCode == 'Enter' && addNewAuthor();
   };
 
-  function addNewAuthor() {
-    let authorName = authorNameInput.value;
+  if (hasAuthors) {
+    let authorsNamesList = authorsNameInput.value.split(';');
+    authorsNamesList.forEach((name) => addNewAuthor(name));
+  }
+
+  function addNewAuthor(name = null) {
+    let authorName = name ? name : authorNameInput.value;
     let inputContainsIsInvalidClass = authorNameInput.classList.contains('is-invalid');
 
     if (!authorName) {

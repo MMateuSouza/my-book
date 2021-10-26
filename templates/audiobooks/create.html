@@ -131,7 +131,7 @@
                                         <div class="form-text m-0">
                                             Pressione `Enter` para adicionar
                                         </div>
-                                        <input type="text" class="d-none" id="{{ form.authors_names.html_name }}" name="{{ form.authors_names.html_name }}">
+                                        <input type="text" class="d-none" id="{{ form.authors_names.html_name }}" name="{{ form.authors_names.html_name }}" value="{% if form.authors_names.value %}{{ form.authors_names.value }}{% endif %}">
                                     </div>
                                     <div class="d-flex justify-content-between col-6 mt-2">
                                         <select class="form-select form-select-sm text-capitalize" id="authors_name_list" name="authors_name_list" multiple>
