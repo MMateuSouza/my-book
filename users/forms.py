@@ -10,6 +10,7 @@ from users.models import User
 class UserForm(forms.ModelForm):
     error_messages = {
         'password_mismatch': _('As senhas fornecidas não coincidem.'),
+        'required': 'Senha é um campo obrigatório',
     }
 
     password1 = forms.CharField(
@@ -65,6 +66,11 @@ class UserForm(forms.ModelForm):
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
+        if not password1 or not password2:
+            raise ValidationError(
+                self.error_messages['required'],
+                code='required',
+            )
         if password1 and password2 and password1 != password2:
             raise ValidationError(
                 self.error_messages['password_mismatch'],
@@ -96,6 +102,9 @@ class UserForm(forms.ModelForm):
 
     def save(self):
         super().save()
+
+        password = self.cleaned_data.get('password2')
+        self.instance.set_password(password)
 
         group = self.cleaned_data.get('group')
         groups = self.instance.groups.all()

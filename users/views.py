@@ -5,8 +5,7 @@ from django.contrib.auth.models import Group
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
-from users.forms import UserForm
-from users.models import User
+from users.forms import User, UserForm
 
 
 @login_required

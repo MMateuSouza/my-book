@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
+from users.forms import Group, User, UserForm
+
 
 @login_required
 def index(request):
@@ -33,3 +35,20 @@ def sign_out(request):
     logout(request)
     messages.success(request, 'Sessão encerrada com sucesso.')
     return redirect('main:sign_in')
+
+
+def sign_up(request):
+    user = User()
+    group = Group.objects.filter(name='Consumidor').first()
+
+    if request.method == 'GET':
+        form = UserForm(instance=user)
+    elif request.method == 'POST':
+        form = UserForm(request.POST, instance=user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Usuário criado com sucesso!')
+            return redirect('main:sign_in')
+
+    return render(request, context=locals(), template_name='main/sign_up.html')
