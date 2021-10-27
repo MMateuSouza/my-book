@@ -231,12 +231,14 @@
    // TODO: FIM - Rever o que poder ser simplificado
 
   function convertChapter(element) {
+    let sequence = 0;
     let chapters = [];
     let orderedListElement = element;
 
     let listItem = orderedListElement.querySelector('li:first-child');
 
     while (listItem) {
+      sequence ++;
       let insideOrderedListElement = listItem.querySelector('ol');
       let subchapters = convertChapter(insideOrderedListElement);
 
@@ -246,6 +248,7 @@
       let chapter = {};
       chapter.id = chapterIdInputElement.value;
       chapter.title = chapterTitle;
+      chapter.sequence = sequence;
       chapter.subchapters = subchapters;
       chapters.push(chapter);
 

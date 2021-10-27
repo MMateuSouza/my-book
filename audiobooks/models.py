@@ -30,7 +30,7 @@ class Book(models.Model):
 
     @property
     def main_chapters(self):
-        return Chapter.objects.filter(book=self, main=True)
+        return Chapter.objects.filter(book=self, main=True).order_by('sequence')
 
     @property
     def chapters_quantity(self):
@@ -49,7 +49,7 @@ class Book(models.Model):
             chapter_dict = dict()
             chapter_dict.update({ 'id': chapter_obj.id })
             chapter_dict.update({ 'title': chapter_obj.title })
-            subchapters = Book.convert_chapters_obj_to_json(chapter_obj.subchapters.all())
+            subchapters = Book.convert_chapters_obj_to_json(chapter_obj.subchapters.all().order_by('sequence'))
             chapter_dict.update({ 'subchapters': subchapters })
 
             chapters_json.append(chapter_dict)
@@ -75,7 +75,8 @@ class Book(models.Model):
                 subchapters_instances = Book.persist_chapters(book, subchapters, False)
 
             title = chapter['title'] if 'title' in chapter else ''
-            chapter_instance = Chapter(book=book, title=title, main=main)
+            sequence = chapter['sequence'] if 'sequence' in chapter else 0
+            chapter_instance = Chapter(book=book, title=title, main=main, sequence=sequence)
             chapter_instance.save()
 
             for subchapter_instance in subchapters_instances:
@@ -97,6 +98,7 @@ class Chapter(models.Model):
     book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', null=True, on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Título', max_length=255)
     main = models.BooleanField(verbose_name='Principal')
+    sequence = models.PositiveSmallIntegerField(verbose_name='Sequência', null=True)
     subchapters = models.ManyToManyField(verbose_name='Subcapítulos', to='self', blank=True, symmetrical=False)
 
     def __str__(self):
