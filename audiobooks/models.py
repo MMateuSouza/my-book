@@ -56,6 +56,20 @@ class Book(models.Model):
 
         return chapters_json
 
+    @property
+    def ordered_chapters_list(self):
+        return Book.get_ordered_chapters_list(self.main_chapters)
+
+    @staticmethod
+    def get_ordered_chapters_list(chapters_obj):
+        chapters_lst = []
+
+        for chapter_obj in chapters_obj:
+            chapters_lst.append(chapter_obj)
+            chapters_lst += Book.get_ordered_chapters_list(chapter_obj.subchapters.all().order_by('sequence'))
+
+        return chapters_lst
+
     @staticmethod
     def convert_chapters_str_to_json(chapters_str):
         if not chapters_str:
