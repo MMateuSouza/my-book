@@ -45,7 +45,7 @@
                                     <td>{{ book.chapters_quantity }}</td>
                                     <td>
                                         <div class="d-grid gap-2 d-md-block">
-                                            <a href="{% url 'audiobooks:recording' %}" class="btn btn-sm btn-outline-primary">
+                                            <a href="{% url 'audiobooks:audiobooks' book.id %}" class="btn btn-sm btn-outline-primary">
                                                 <i class="bi bi-mic"></i>
                                             </a>
                                             <a href="{% url 'audiobooks:change' book.id %}" class="btn btn-sm btn-outline-warning">

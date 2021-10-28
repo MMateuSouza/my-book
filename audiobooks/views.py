@@ -38,5 +38,12 @@ def create(request, id=None):
 
 
 @login_required
-def recording(request):
+def audiobooks(request, id):
+    # TODO: Implementar view para visualização de informações do livro e audiobooks cadastrados.
+    return render(request, template_name='audiobooks/audiobooks.html')
+
+
+@login_required
+def recording(request, id):
+    # TODO: Implementar persistência de audios para um livro.
     return render(request, template_name='audiobooks/recording.html')
