@@ -14,14 +14,14 @@
   let formElement = document.querySelector('#audiobook_form');
   let submitFormButton = document.querySelector('#submit_form');
 
-  addAuthorButton.onclick = addNewAuthor;
+  addAuthorButton.onclick = addAuthor;
   removeAuthorButton.onclick = removeAuthors;
   submitFormButton.onclick = (e) => validateFormBeforeSubmit(e);
   authorNameInput.onkeypress = function (e) {
     if (!e) e = window.event;
     let keyCode = e.code || e.key;
 
-    keyCode == 'Enter' && addNewAuthor();
+    keyCode == 'Enter' && addAuthor();
   };
 
   if (hasAuthors) {
@@ -29,8 +29,13 @@
     authorsNamesList.forEach((name) => addNewAuthor(name));
   }
 
-  function addNewAuthor(name = null) {
-    let authorName = name ? name : authorNameInput.value;
+  function addAuthor() {
+    let authorName = authorNameInput.value;
+    addNewAuthor(authorName);
+  }
+
+  function addNewAuthor(name) {
+    let authorName = name ? name : '';
     let inputContainsIsInvalidClass = authorNameInput.classList.contains('is-invalid');
 
     if (!authorName) {
