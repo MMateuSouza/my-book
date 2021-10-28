@@ -74,7 +74,7 @@
                                 <input type="text" class="form-control form-control-sm text-lowercase {% if form.isbn_10.errors %}is-invalid{% endif %}"
                                        id="{{ form.isbn_10.id_for_label }}" maxlength="{{ form.fields.isbn_10.max_length }}"
                                        name="{{ form.isbn_10.html_name }}"
-                                       value="{% if form.isbn_10.value %}{{ form.isbn_10.value }}{% endif %}">
+                                       value="{% if form.isbn_10.value %}{{ form.isbn_10.value }}{% endif %}" oninput="this.value=this.value.replace(/[^\d]/,'')">
                                 {% if form.isbn_10.errors %}
                                 <div class="invalid-feedback">
                                 {% for error in form.isbn_10.errors %}
@@ -89,7 +89,7 @@
                                 <input type="text" class="form-control form-control-sm text-lowercase {% if form.isbn_13.errors %}is-invalid{% endif %}"
                                        id="{{ form.isbn_13.id_for_label }}" maxlength="{{ form.fields.isbn_13.max_length }}"
                                        name="{{ form.isbn_13.html_name }}"
-                                       value="{% if form.isbn_13.value %}{{ form.isbn_13.value }}{% endif %}">
+                                       value="{% if form.isbn_13.value %}{{ form.isbn_13.value }}{% endif %}" oninput="this.value=this.value.replace(/[^\d]/,'')">
                                 {% if form.isbn_13.errors %}
                                 <div class="invalid-feedback">
                                 {% for error in form.isbn_13.errors %}
