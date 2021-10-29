@@ -39,8 +39,9 @@ def create(request, id=None):
 
 @login_required
 def audiobooks(request, id):
-    # TODO: Implementar view para visualização de informações do livro e audiobooks cadastrados.
-    return render(request, template_name='audiobooks/audiobooks.html')
+    book = Book.objects.get(id=id)
+
+    return render(request, context={'book': book}, template_name='audiobooks/audiobooks.html')
 
 
 @login_required

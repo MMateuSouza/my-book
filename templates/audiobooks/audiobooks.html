@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Audiobooks{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block content %}
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <span>Listagem de Audiobook</span>
+
+                        <div>
+                            <a class="btn btn-sm btn-secondary" href="{% url 'audiobooks:index' %}">Voltar</a>
+                            <a class="btn btn-sm btn-primary" href="{% url 'audiobooks:recording' 1 %}">Novo</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="col-6 col-lg-4 align-self-center">
+                                <img class="img-thumbnail mx-auto d-block rounded" width="200px" src="{{ MEDIA_ROOT }}/{{ book.front_cover }}" alt="">
+                            </div>
+                            <div class="col-6 col-lg-8 align-self-center">
+                                <p class="text-capitalize my-2"><span class="fw-bold">Título: </span>{{ book.title }}</p>
+                                <p class="text-capitalize my-2"><span class="fw-bold">Editora: </span>{{ book.publishing_company }}</p>
+                                <p class="my-2"><span class="fw-bold">Edição: </span>{{ book.edition }}ª</p>
+                                <p class="my-2"><span class="fw-bold">ISBN 10: </span>{{ book.isbn_10 }}</p>
+                                <p class="my-2"><span class="fw-bold">ISBN 13: </span>{{ book.isbn_13 }}</p>
+                                <p class="text-capitalize my-2"><span class="fw-bold">Autores: </span>{{ book.authors }}</p>
+                                <p class="my-2"><span class="fw-bold">Qtd. de Capítulos: </span>{{ book.chapters_quantity }}</p>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr class="text-center">
+                                    <th scope="col">#</th>
+                                    <th scope="col">Versão</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Ações</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center">
+                                        <td colspan="4">Não há <span class="fst-italic">audiobooks</span> registrados para o livro</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
