@@ -24,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(",")])
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
 
 # Application definition
@@ -62,16 +62,17 @@ ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
                 'constance.context_processors.config',
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+                'django.template.context_processors.debug',
+                'django.template.context_processors.media',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -84,9 +85,9 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    "default": config(
-        "DATABASE_URL",
-        default=f"sqlite:///{BASE_DIR}/db.sqlite3",
+    'default': config(
+        'DATABASE_URL',
+        default=f'sqlite:///{BASE_DIR}/db.sqlite3',
         cast=db_url
     )
 }
@@ -109,9 +110,9 @@ USE_TZ = config('USE_TZ', cast=bool, default=True)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = "static_prd/"
-STATIC_URL = "/static/"
-STATICFILES_DIRS = ( os.path.join("static"),)
+STATIC_ROOT = 'static_prd/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = ( os.path.join('static'),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -139,3 +140,16 @@ LOGOUT_REDIRECT_URL = '/sign_out/'
 DEFAULT_ADMINISTRATOR_USERNAME = config('DEFAULT_ADMINISTRATOR_USERNAME', cast=str, default='admin')
 DEFAULT_ADMINISTRATOR_PASSWORD = config('DEFAULT_ADMINISTRATOR_PASSWORD', cast=str, default='12345')
 DEFAULT_ADMINISTRATOR_EMAIL = config('DEFAULT_ADMINISTRATOR_PASSWORD', cast=str, default='admin@admin.com')
+
+DEFAULT_MEDIA_ROOT = f'{BASE_DIR}/media/'
+MEDIA_ROOT = config('MEDIA_ROOT', cast=str, default=DEFAULT_MEDIA_ROOT)
+MEDIA_URL = '/media/'
+
+FRONT_COVER_DIRECTORY_PATH = f'{MEDIA_ROOT}/front_convers/'
+RECORDING_FILE_DIRECTORY_PATH = f'{MEDIA_ROOT}/audiobooks/'
+
+MEDIA_PATHS = [MEDIA_ROOT, FRONT_COVER_DIRECTORY_PATH, RECORDING_FILE_DIRECTORY_PATH,]
+
+for path in MEDIA_PATHS:
+    if not os.path.exists(path):
+        os.mkdir(path)

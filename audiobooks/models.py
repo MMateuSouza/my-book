@@ -3,9 +3,39 @@ from django.db import models
 
 import json
 
-# TODO: Verificar quais campos serão adicionados para instância AudioBook
-# class AudioBook(models.Model):
-#     pass
+from project.settings import FRONT_COVER_DIRECTORY_PATH, RECORDING_FILE_DIRECTORY_PATH
+
+
+def directory_path(instance, filename, path):
+    extension = filename.split('.')[-1]
+    return f'{path}/{instance.id}.{extension}'
+
+
+def front_cover_directory_path(instance, filename):
+    return directory_path(instance, filename, FRONT_COVER_DIRECTORY_PATH)
+
+
+def recording_file_directory_path(instance, filename):
+    return directory_path(instance, filename, RECORDING_FILE_DIRECTORY_PATH)
+
+
+class AudioBook(models.Model):
+    MALE = 'M'
+    FEMALE = 'F'
+
+    TYPES_OF_VOICES = [
+        (MALE, 'Masculina'),
+        (FEMALE, 'Feminina'),
+    ]
+
+    book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', on_delete=models.CASCADE)
+    narration_type = models.CharField(max_length=1, choices=TYPES_OF_VOICES)
+
+
+class AudioBookChapter(models.Model):
+    audiobook = models.ForeignKey(verbose_name='Audiobook', to='audiobooks.AudioBook', on_delete=models.CASCADE)
+    chapter = models.ForeignKey(verbose_name='Capítulo', to='audiobooks.Chapter', on_delete=models.CASCADE)
+    recording_file = models.FileField(verbose_name='Gravação')
 
 
 class Book(models.Model):
