@@ -35,6 +35,14 @@ class AudioBookChapter(models.Model):
     chapter = models.ForeignKey(verbose_name='Capítulo', to='audiobooks.Chapter', on_delete=models.CASCADE)
     recording_file = models.FileField(verbose_name='Gravação', upload_to=recording_file_directory_path)
 
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            recording_file = self.recording_file
+            self.recording_file = None
+            super(AudioBookChapter, self).save(*args, **kwargs)
+            self.recording_file = recording_file
+        super(AudioBookChapter, self).save(*args, **kwargs)
+
 
 class Book(models.Model):
     title = models.CharField(verbose_name='Título', max_length=255)
