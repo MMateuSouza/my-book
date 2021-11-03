@@ -3,8 +3,6 @@ from django.db import models
 
 import json
 
-from project.settings import FRONT_COVER_DIRECTORY_PATH, RECORDING_FILE_DIRECTORY_PATH
-
 
 def directory_path(instance, filename, path):
     extension = filename.split('.')[-1]
@@ -12,11 +10,11 @@ def directory_path(instance, filename, path):
 
 
 def front_cover_directory_path(instance, filename):
-    return directory_path(instance, filename, FRONT_COVER_DIRECTORY_PATH)
+    return directory_path(instance, filename, 'front_convers')
 
 
 def recording_file_directory_path(instance, filename):
-    return directory_path(instance, filename, RECORDING_FILE_DIRECTORY_PATH)
+    return directory_path(instance, filename, 'audiobooks')
 
 
 class AudioBook(models.Model):
@@ -35,7 +33,7 @@ class AudioBook(models.Model):
 class AudioBookChapter(models.Model):
     audiobook = models.ForeignKey(verbose_name='Audiobook', to='audiobooks.AudioBook', on_delete=models.CASCADE)
     chapter = models.ForeignKey(verbose_name='Capítulo', to='audiobooks.Chapter', on_delete=models.CASCADE)
-    recording_file = models.FileField(verbose_name='Gravação')
+    recording_file = models.FileField(verbose_name='Gravação', upload_to=recording_file_directory_path)
 
 
 class Book(models.Model):
@@ -44,10 +42,18 @@ class Book(models.Model):
     edition = models.PositiveIntegerField(verbose_name='Edição')
     isbn_10 = models.CharField(verbose_name='ISBN 10', max_length=10)
     isbn_13 = models.CharField(verbose_name='ISBN 13', max_length=13)
-    front_cover = models.ImageField(verbose_name='Foto de Capa', upload_to='front_cover')
+    front_cover = models.ImageField(verbose_name='Foto de Capa', upload_to=front_cover_directory_path)
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            front_cover = self.front_cover
+            self.front_cover = None
+            super(Book, self).save(*args, **kwargs)
+            self.front_cover = front_cover
+        super(Book, self).save(*args, **kwargs)
 
     @property
     def authors_lst(self):
