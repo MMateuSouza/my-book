@@ -27,7 +27,8 @@ class AudioBook(models.Model):
     ]
 
     book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', on_delete=models.CASCADE)
-    narration_type = models.CharField(max_length=1, choices=TYPES_OF_VOICES)
+    storyteller = models.ForeignKey(verbose_name='Narrador', to='users.User', on_delete=models.CASCADE)
+    narration_type = models.CharField(verbose_name='Tipo de Narração', max_length=1, choices=TYPES_OF_VOICES)
 
 
 class AudioBookChapter(models.Model):

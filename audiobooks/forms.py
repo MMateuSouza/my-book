@@ -1,4 +1,4 @@
-from audiobooks.models import Book, BookAuthor, Chapter, forms
+from audiobooks.models import AudioBook, Book, BookAuthor, forms
 
 
 class BookForm(forms.ModelForm):
@@ -64,3 +64,9 @@ class BookForm(forms.ModelForm):
 
         chapters_dict = self.cleaned_data.get('chapters_str')
         Book.persist_chapters(self.instance, chapters_dict)
+
+
+class AudioBookForm(forms.ModelForm):
+    class Meta:
+        model = AudioBook
+        fields = '__all__'

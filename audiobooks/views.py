@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
-from audiobooks.forms import BookForm
-from audiobooks.models import Book
+from audiobooks.forms import AudioBook, AudioBookForm, Book, BookForm
 
 
 @login_required
@@ -40,11 +39,26 @@ def create(request, id=None):
 @login_required
 def audiobooks(request, id):
     book = Book.objects.get(id=id)
+    audiobooks = AudioBook.objects.filter(book=book)
+    has_audiobooks = audiobooks.count() > 0
 
-    return render(request, context={'book': book}, template_name='audiobooks/audiobooks.html')
+    return render(request, context=locals(), template_name='audiobooks/audiobooks.html')
 
 
 @login_required
-def recording(request, id):
-    # TODO: Implementar persistência de audios para um livro.
-    return render(request, template_name='audiobooks/recording.html')
+def recording(request, book_id, audiobook_id=None):
+    book = Book.objects.get(id=book_id)
+    audiobook = AudioBook.objects.get(id=audiobook_id) if audiobook_id else AudioBook()
+
+    if request.method == 'GET':
+        form = AudioBookForm(instance=audiobook)
+    elif request.method == 'POST':
+        form = AudioBookForm(request.POST, request.FILES, instance=audiobook)
+
+        if form.is_valid():
+            created_or_updated_msg = 'modificada' if audiobook.id else 'registrada'
+            form.save()
+            messages.success(request, f'Gravação {created_or_updated_msg} com sucesso!')
+            return redirect('audiobooks:audiobooks', id=book.id)
+
+    return render(request, context=locals(), template_name='audiobooks/recording.html')

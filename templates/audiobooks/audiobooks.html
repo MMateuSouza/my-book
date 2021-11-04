@@ -16,7 +16,7 @@
 
                         <div>
                             <a class="btn btn-sm btn-secondary" href="{% url 'audiobooks:index' %}">Voltar</a>
-                            <a class="btn btn-sm btn-primary" href="{% url 'audiobooks:recording' 1 %}">Novo</a>
+                            <a class="btn btn-sm btn-primary" href="{% url 'audiobooks:new_recording' 1 %}">Novo</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -42,15 +42,37 @@
                                 <thead>
                                 <tr class="text-center">
                                     <th scope="col">#</th>
+                                    <th scope="col">Narrador</th>
                                     <th scope="col">Versão</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Ações</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="text-center">
-                                        <td colspan="4">Não há <span class="fst-italic">audiobooks</span> registrados para o livro</td>
-                                    </tr>
+                                {% if has_audiobooks %}
+                                {% for audiobook in audiobooks %}
+                                <tr class="text-center">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td class="text-capitalize">{{ audiobook.storyteller.full_name }}</td>
+                                    <td class="text-capitalize">{{ audiobook.get_narration_type_display }}</td>
+                                    <td class="text-capitalize">Pendente</td>
+                                    <td>
+                                        <div class="d-grid gap-2 d-md-block">
+                                            <a href="{% url 'audiobooks:change_recording' book.id audiobook.id %}" class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr class="text-center">
+                                    <td colspan="4">Não há <span class="fst-italic">audiobooks</span> registrados para o livro</td>
+                                </tr>
+                                {% endif %}
                                 </tbody>
                             </table>
                         </div>
