@@ -66,6 +66,9 @@
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <label for="chapter_{{ chapter.id }}" class="form-label text-capitalize"><span class="fw-bold">Capítulo:</span> {{ chapter.title }}</label>
                                     <input class="form-control form-control-sm" id="chapter_{{ chapter.id }}" name="chapter_{{ chapter.id }}" type="file">
+                                    <div class="invalid-feedback">
+                                        Este campo é obrigatório
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
