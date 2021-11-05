@@ -1,14 +1,27 @@
+from constance import config
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
+from audiobooks.forms import AudioBook
 from users.forms import Group, User, UserForm
 
 
 @login_required
 def index(request):
-    return render(request, template_name='main/index.html')
+    q = request.GET.get('q', None)
+
+    audiobooks_lst = AudioBook.objects.all().order_by('id')
+    if q:
+        audiobooks_lst = audiobooks_lst.filter(book__title__icontains=q)
+    paginator = Paginator(audiobooks_lst, config.ELEMENTS_PER_PAGE)
+    has_audiobooks = paginator.count != 0
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, context=locals(), template_name='main/index.html')
 
 
 def sign_in(request):

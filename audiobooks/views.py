@@ -5,7 +5,6 @@ from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
 from audiobooks.forms import AudioBook, AudioBookForm, Book, BookForm
-from audiobooks.models import AudioBookChapter
 
 
 @login_required

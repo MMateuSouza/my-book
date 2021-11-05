@@ -7,6 +7,34 @@
 {% endblock %}
 
 {% block content %}
+<section class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="col-6">
+                        <span>Audiobooks</span>
+                    </div>
+
+                    <div class="col-6 col-lg-5">
+                        <form>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="Buscar audiobooks" name="q" value="{% if q %}{{ q }}{% endif %}">
+                                <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body">
+                {% if has_audiobooks %}
+                {% else %}
+                <p class="text-center m-0">Não há <span class="fst-italic">audiobooks</span> cadastrados</p>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
 
 {% block script %}
