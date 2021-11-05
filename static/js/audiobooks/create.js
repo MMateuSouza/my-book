@@ -97,7 +97,7 @@
   let chaptersObject = document.querySelector('#chapters');
   let addChappterButton = document.querySelector('#add-chapter');
 
-  if (isNewBook && !hasChapters) {
+  if (!hasChapters) {
     addNewChapter();
   } else {
     loadChapters();

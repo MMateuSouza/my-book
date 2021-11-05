@@ -155,9 +155,19 @@ class Book(models.Model):
             if subchapters:
                 subchapters_instances = Book.persist_chapters(book, subchapters, False)
 
+            chapter_instance = None
+            try:
+                id = chapter['id'] if 'id' in chapter and chapter['id'] else None
+                chapter_instance = Chapter.objects.get(id=id)
+            except Chapter.DoesNotExist:
+                chapter_instance = Chapter()
+
             title = chapter['title'] if 'title' in chapter else ''
             sequence = chapter['sequence'] if 'sequence' in chapter else 0
-            chapter_instance = Chapter(book=book, title=title, main=main, sequence=sequence)
+            chapter_instance.book = book
+            chapter_instance.title = title
+            chapter_instance.main = main
+            chapter_instance.sequence = sequence
             chapter_instance.save()
 
             for subchapter_instance in subchapters_instances:
