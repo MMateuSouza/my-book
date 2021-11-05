@@ -1,6 +1,9 @@
+from django.core.files import storage
 from django.db import models
 
 import json
+
+from project.storage import OverwriteStorage
 
 
 def directory_path(instance, filename, path):
@@ -53,7 +56,7 @@ class AudioBook(models.Model):
 class AudioBookChapter(models.Model):
     audiobook = models.ForeignKey(verbose_name='Audiobook', to='audiobooks.AudioBook', on_delete=models.CASCADE)
     chapter = models.ForeignKey(verbose_name='Capítulo', to='audiobooks.Chapter', on_delete=models.CASCADE)
-    recording_file = models.FileField(verbose_name='Gravação', upload_to=recording_file_directory_path)
+    recording_file = models.FileField(verbose_name='Gravação', max_length=255, storage=OverwriteStorage(), upload_to=recording_file_directory_path)
 
     def save(self, *args, **kwargs):
         if self.pk is None:
@@ -70,7 +73,7 @@ class Book(models.Model):
     edition = models.PositiveIntegerField(verbose_name='Edição')
     isbn_10 = models.CharField(verbose_name='ISBN 10', max_length=10)
     isbn_13 = models.CharField(verbose_name='ISBN 13', max_length=13)
-    front_cover = models.ImageField(verbose_name='Foto de Capa', upload_to=front_cover_directory_path)
+    front_cover = models.ImageField(verbose_name='Foto de Capa', max_length=255, storage=OverwriteStorage(), upload_to=front_cover_directory_path)
 
     def __str__(self):
         return self.title
