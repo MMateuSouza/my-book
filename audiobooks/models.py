@@ -147,13 +147,15 @@ class Book(models.Model):
     @staticmethod
     def persist_chapters(book, chapters=[], main=True):
         chapters_instances = []
+        inserted_or_updated_ids = []
 
         for chapter in chapters:
             subchapters = chapter['subchapters'] if 'subchapters' in chapter else []
             subchapters_instances = []
 
             if subchapters:
-                subchapters_instances = Book.persist_chapters(book, subchapters, False)
+                subchapters_instances, _ = Book.persist_chapters(book, subchapters, False)
+                inserted_or_updated_ids += _
 
             chapter_instance = None
             try:
@@ -169,12 +171,13 @@ class Book(models.Model):
             chapter_instance.main = main
             chapter_instance.sequence = sequence
             chapter_instance.save()
+            inserted_or_updated_ids.append(chapter_instance.id)
 
             for subchapter_instance in subchapters_instances:
                 chapter_instance.subchapters.add(subchapter_instance)
 
             chapters_instances.append(chapter_instance)
-        return chapters_instances
+        return chapters_instances, inserted_or_updated_ids
 
 
 class BookAuthor(models.Model):

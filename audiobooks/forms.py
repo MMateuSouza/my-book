@@ -1,6 +1,6 @@
 from django import forms
 
-from audiobooks.models import AudioBook, AudioBookChapter, Book, BookAuthor
+from audiobooks.models import AudioBook, AudioBookChapter, Book, BookAuthor, Chapter
 
 
 class BookForm(forms.ModelForm):
@@ -65,7 +65,13 @@ class BookForm(forms.ModelForm):
         # Persistência de Capítulos
 
         chapters_dict = self.cleaned_data.get('chapters_str')
-        Book.persist_chapters(self.instance, chapters_dict)
+        _, inserted_or_updated_ids = Book.persist_chapters(self.instance, chapters_dict)
+
+        # Remoção dos Capítulos
+        Chapter.objects \
+            .filter(book=self.instance) \
+            .exclude(id__in=inserted_or_updated_ids) \
+            .delete()
 
 
 class AudioBookForm(forms.ModelForm):
