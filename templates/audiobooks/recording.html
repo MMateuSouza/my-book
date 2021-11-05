@@ -28,7 +28,7 @@
                             <div class="col-4">
                                 <label for="{{ form.storyteller.id_for_label }}"
                                        class="form-label">{{ form.storyteller.label }}</label>
-                                <input class="d-none" type="number" name="{{ form.storyteller.html_name }}" value="{% if audiobook.id %}{{ audiobook.storyteller.id }}{% else %}{{ request.user.id }}{% endif %}">
+                                <input class="d-none" type="number" name="{{ form.storyteller.html_name }}" value="{{ request.user.id }}">
                                 <input type="text" class="form-control form-control-sm text-capitalize" value="{% if audiobook.id %}{{ audiobook.storyteller.full_name }}{% else %}{{ request.user.full_name }}{% endif %}" readonly>
                             </div>
                             <div class="col-4">
@@ -38,7 +38,7 @@
                                     {% if audiobook.TYPES_OF_VOICES %}
                                     <option class="text-center" disabled>--- Selecione ---</option>
                                     {% for key, value in audiobook.TYPES_OF_VOICES %}
-                                        <option value="{{ key }}" class="text-capitalize">{{ value }}</option>
+                                        <option value="{{ key }}" class="text-capitalize" {% if audiobook.narration_type and audiobook.narration_type == key %}selected{% endif %}>{{ value }}</option>
                                     {% endfor %}
                                     {% else %}
                                     <option class="text-center" selected disabled>Nenhum tipo de narração</option>

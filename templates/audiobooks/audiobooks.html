@@ -16,7 +16,7 @@
 
                         <div>
                             <a class="btn btn-sm btn-secondary" href="{% url 'audiobooks:index' %}">Voltar</a>
-                            <a class="btn btn-sm btn-primary" href="{% url 'audiobooks:new_recording' 1 %}">Novo</a>
+                            <a class="btn btn-sm btn-primary" href="{% url 'audiobooks:new_recording' book.id %}">Novo</a>
                         </div>
                     </div>
                     <div class="card-body">

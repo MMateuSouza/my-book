@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
 from audiobooks.forms import AudioBook, AudioBookForm, Book, BookForm
+from audiobooks.models import AudioBookChapter
 
 
 @login_required
@@ -53,11 +54,12 @@ def recording(request, book_id, audiobook_id=None):
     if request.method == 'GET':
         form = AudioBookForm(instance=audiobook)
     elif request.method == 'POST':
-        form = AudioBookForm(request.POST, request.FILES, instance=audiobook)
+        form = AudioBookForm(request.POST, instance=audiobook)
 
         if form.is_valid():
             created_or_updated_msg = 'modificada' if audiobook.id else 'registrada'
             form.save()
+            AudioBook.persist_audiobook_chapters(audiobook=form.instance, files=request.FILES)
             messages.success(request, f'Gravação {created_or_updated_msg} com sucesso!')
             return redirect('audiobooks:audiobooks', id=book.id)
 

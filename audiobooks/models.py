@@ -1,4 +1,3 @@
-from django import forms
 from django.db import models
 
 import json
@@ -29,6 +28,26 @@ class AudioBook(models.Model):
     book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', on_delete=models.CASCADE)
     storyteller = models.ForeignKey(verbose_name='Narrador', to='users.User', on_delete=models.CASCADE)
     narration_type = models.CharField(verbose_name='Tipo de Narração', max_length=1, choices=TYPES_OF_VOICES)
+
+    @staticmethod
+    def persist_audiobook_chapter(audiobook, description, file):
+        _, chapter_id = description.split('_')
+        chapter = Chapter.objects.get(id=chapter_id)
+
+        audiobook_chapter = None
+        try:
+            audiobook_chapter = AudioBookChapter.objects.get(audiobook=audiobook, chapter=chapter)
+        except AudioBookChapter.DoesNotExist:
+            audiobook_chapter = AudioBookChapter(audiobook=audiobook, chapter=chapter)
+            audiobook_chapter.save()
+
+        extension = str(file).split('.')[-1]
+        audiobook_chapter.recording_file.save(f'tmp.{extension}', file)
+
+    @staticmethod
+    def persist_audiobook_chapters(audiobook, files):
+        for file in files:
+            AudioBook.persist_audiobook_chapter(audiobook, file, files.get(file))
 
 
 class AudioBookChapter(models.Model):
