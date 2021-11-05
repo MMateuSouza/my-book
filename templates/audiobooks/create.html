@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Novo Livro{% endblock %}
+{% block title %}
+    {% if book.id %}Modificar{% else %}Cadastrar{% endif %} Livro
+{% endblock %}
 
 {% block style %}
 {% endblock %}

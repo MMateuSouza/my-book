@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Novo Usuário{% endblock %}
+{% block title %}
+    {% if user.id %}Modificar{% else %}Cadastrar{% endif %} Usuário
+{% endblock %}
 
 {% block style %}
 {% endblock %}
