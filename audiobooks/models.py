@@ -1,7 +1,10 @@
 from django.core.files import storage
 from django.db import models
+from pydub import AudioSegment
 
 import json
+import os
+import tempfile
 
 from project.storage import OverwriteStorage
 
@@ -48,9 +51,37 @@ class AudioBook(models.Model):
         audiobook_chapter.recording_file.save(f'tmp.{extension}', file)
 
     @staticmethod
+    def convert_multiple_files_into_once(filename, files_lst):
+        audio_file = None
+        format = None
+
+        for i, file in enumerate(files_lst):
+            if i == 0:
+                audio_file = AudioSegment.from_file(file)
+                format = str(file).split('.')[-1]
+                continue
+
+            audio_file_aux = AudioSegment.from_file(file)
+            audio_file += audio_file_aux
+
+        output_dir = os.path.join(tempfile.gettempdir(), f'{filename}.{format}')
+        audio_file.export(output_dir, format=format)
+
+        return open(output_dir, 'rb')
+
+    @staticmethod
     def persist_audiobook_chapters(audiobook, files):
         for file in files:
-            AudioBook.persist_audiobook_chapter(audiobook, file, files.get(file))
+            audio_file = None
+            files_lst = files.getlist(file)
+            files_lst_length = len(files_lst)
+
+            if files_lst_length > 1:
+                audio_file = AudioBook.convert_multiple_files_into_once(file, files_lst)
+            elif files_lst_length == 1:
+                audio_file = files_lst[0]
+
+            AudioBook.persist_audiobook_chapter(audiobook, file, audio_file)
 
 
 class AudioBookChapter(models.Model):
