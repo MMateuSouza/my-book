@@ -63,3 +63,14 @@ def recording(request, book_id, audiobook_id=None):
             return redirect('audiobooks:audiobooks', id=book.id)
 
     return render(request, context=locals(), template_name='audiobooks/recording.html')
+
+
+@login_required
+def play(request, audiobook_id, chapter_id=None):
+    audiobook = AudioBook.objects.get(id=audiobook_id)
+
+    if chapter_id:
+        # TODO: Obter o áudio específico de um audiobook (Sob demanda)
+        pass
+
+    return render(request, context=locals(), template_name='audiobooks/play.html')
