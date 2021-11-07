@@ -106,7 +106,7 @@
                                 <input type="file" class="form-control form-control-sm text-lowercase {% if form.front_cover.errors %}is-invalid{% endif %}"
                                        id="{{ form.front_cover.id_for_label }}" maxlength="{{ form.fields.front_cover.max_length }}"
                                        name="{{ form.front_cover.html_name }}"
-                                       value="{% if form.front_cover.value %}{{ form.front_cover.value }}{% endif %}">
+                                       value="{% if form.front_cover.value %}{{ form.front_cover.value }}{% endif %}" accept="image/*">
                                 {% if form.front_cover.errors %}
                                 <div class="invalid-feedback">
                                 {% for error in form.front_cover.errors %}
