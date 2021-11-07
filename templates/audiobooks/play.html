@@ -12,7 +12,17 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">Reprodução de Audiobook</div>
-                <div class="card-body"></div>
+                <div class="card-body">
+                    <div class="col-12 d-flex justify-content-center border">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button id="skip-back-button" type="button" class="btn btn-sm btn-link fs-2"><i class="bi bi-skip-start-circle"></i></i></button>
+                            <button id="play-pause-button" type="button" class="btn btn-sm btn-link fs-2">
+                                <i class="bi bi-play-circle"></i><i class="bi bi-pause-circle d-none"></i>
+                            </button>
+                            <button id="skip-forward-button" type="button" class="btn btn-sm btn-link fs-2"><i class="bi bi-skip-end-circle"></i></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -20,4 +30,5 @@
 {% endblock %}
 
 {% block script %}
+<script src="{% static 'js/audiobooks/play.js' %}"></script>
 {% endblock %}
