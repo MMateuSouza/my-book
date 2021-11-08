@@ -136,6 +136,10 @@ class Book(models.Model):
         return self.main_chapters.count()
 
     @property
+    def has_chapters(self):
+        return self.chapters_quantity != 0
+
+    @property
     def chapters_str(self):
         return Book.convert_chapters_obj_to_json(self.main_chapters)
 
