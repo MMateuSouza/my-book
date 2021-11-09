@@ -2,9 +2,10 @@ from constance import config
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
-from audiobooks.forms import AudioBook, AudioBookForm, Book, BookForm
+from audiobooks.forms import AudioBook, AudioBookChapter, AudioBookForm, Book, BookForm
 
 
 @login_required
@@ -66,6 +67,11 @@ def recording(request, book_id, audiobook_id=None):
 
 
 @login_required
-def play(request, audiobook_id):
+def play(request, audiobook_id, chapter_id=None):
     audiobook = AudioBook.objects.get(id=audiobook_id)
+
+    if chapter_id:
+        audiobook_chapter = AudioBookChapter.objects.filter(audiobook=audiobook, chapter__id=chapter_id).first()
+        return JsonResponse({'recording_file': audiobook_chapter.get_recording_file}, safe=False)
+
     return render(request, context=locals(), template_name='audiobooks/play.html')

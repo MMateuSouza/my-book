@@ -7,18 +7,106 @@
   var elapsedTime = document.querySelector('#elapsed-time');
   var totalTime = document.querySelector('#total-time');
   var chaptersTable = document.querySelector('#chapters-table');
-  var mediaUrl = document.querySelector('#media-url');
+  var audioBookId = document.querySelector('#audiobook-id').value || null;
   var audioElement = document.querySelector('#audio-element');
+  var currentAudioBookChapter = null;
 
-  function getAudioDuration() {
+  audioElement.addEventListener('loadedmetadata', (e) => {
+    // Início - Tratativa para problema de duração retornando `Infinity`
+    if (audioElement.duration == Infinity) {
+      audioElement.currentTime = 1e101;
+      audioElement.ontimeupdate = function () {
+        this.ontimeupdate = () => {
+          return;
+        }
+        audioElement.currentTime = 0;
+        return;
+      }
+    }
+    // Fim - Tratativa para problema de duração retornando `Infinity`
+    setAudioBookTotalTime();
+  });
+
+  audioElement.addEventListener('timeupdate', (e) => {
+    updateProgressBar();
+  });
+
+  audioElement.addEventListener('canplay', (e) => {
+    isPlaying && audioElement.play();
+  });
+
+  function setAudioBookChapterUrlById(chapterId) {
+    let xhr = new XMLHttpRequest();
+    xhr.overrideMimeType('application/json');
+
+    xhr.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        let response = JSON.parse(xhr.responseText);
+        audioElement.src = response.recording_file;
+        audioElement.load();
+      }
+    }
+
+    xhr.open('GET', `/audiobooks/${audioBookId}/play/${chapterId}`, true);
+    xhr.send();
+  }
+
+  function getAudioBookChapter() {
+    let idInputElement = currentAudioBookChapter.querySelector('input.chapter-id');
+    let chapterId = idInputElement.value;
+
+    setAudioBookChapterUrlById(chapterId);
+  }
+
+  function init() {
+    if (!currentAudioBookChapter) {
+      currentAudioBookChapter = chaptersTable.querySelector('tr');
+      currentAudioBookChapter.classList.add('table-active');
+
+      getAudioBookChapter();
+    }
+  }
+
+  function getAudioDuration(duration) {
+    if (duration === Infinity) getAudioDuration(0);
+
     let date = new Date(null);
-    date.setSeconds(audioElement.duration);
+    date.setSeconds(duration);
 
     return date.toISOString().substr(11, 8);
   }
 
-  function previousAudioBookChapter() {
-    console.log('previousAudioBookChapter');
+  function setAudioBookTotalTime() {
+    totalTime.innerHTML = getAudioDuration(audioElement.duration);
+  }
+
+  function clearInterface() {
+    // Limpa o tempo decorrido
+    elapsedTime.innerHTML = getAudioDuration(0);
+    // Limpa a barra de progresso
+    progressBar.value = 0;
+  }
+
+  function updateProgressBar() {
+    let currentTime = audioElement.currentTime;
+    let progress = Math.floor((currentTime * 100) / audioElement.duration);
+
+    progressBar.value = progress ? progress : 0;
+    elapsedTime.innerHTML = getAudioDuration(currentTime);
+  }
+
+  function getNextPreviousAudioBookChapter(reverse=false) {
+    let chaptersList = Array.from(chaptersTable.querySelectorAll('tr'));
+    if (reverse) chaptersList = chaptersList.reverse();
+    let currentIndex = chaptersList.indexOf(currentAudioBookChapter);
+    let nextIndex = (currentIndex + 1) % chaptersList.length;
+
+    currentAudioBookChapter = chaptersList[nextIndex];
+    changeAudioBookChapter();
+  }
+
+  function getPreviousAudioBookChapter() {
+    getNextPreviousAudioBookChapter(true);
   }
 
   function changePlayPauseButtonState() {
@@ -32,27 +120,34 @@
   }
 
   function playOrPauseAudioBookChapter() {
-    changePlayPauseButtonState();
-
     isPlaying && audioElement.pause();
     !isPlaying && audioElement.play();
+
+    changePlayPauseButtonState();
   }
 
-  function nextAudioBookChapter() {
-    console.log('nextAudioBookChapter');
+  function getNextAudioBookChapter() {
+    getNextPreviousAudioBookChapter();
   }
 
-  skipBackButton.onclick = previousAudioBookChapter;
+  skipBackButton.onclick = getPreviousAudioBookChapter;
   playPauseButton.onclick = playOrPauseAudioBookChapter;
-  skipForwardButton.onclick = nextAudioBookChapter;
+  skipForwardButton.onclick = getNextAudioBookChapter;
 
-  chaptersTable.ondblclick = function(e) {
-    let trElement = e.target.parentNode;
-
-    // Ignorar se houver duplo clique na mesma linha
-    if (trElement.classList.contains('table-active')) return;
+  function changeAudioBookChapter() {
+    if (currentAudioBookChapter.classList.contains('table-active')) return;
 
     chaptersTable.querySelectorAll('tr.table-active').forEach((el) => el.classList.remove('table-active'));
-    trElement.classList.add('table-active');
+    currentAudioBookChapter.classList.add('table-active');
+
+    clearInterface();
+    getAudioBookChapter();
   }
+
+  chaptersTable.ondblclick = function (e) {
+    currentAudioBookChapter = e.target.parentNode;
+    changeAudioBookChapter();
+  }
+
+  init();
 })();

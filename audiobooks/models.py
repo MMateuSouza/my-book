@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.files import storage
 from django.db import models
 from pydub import AudioSegment
@@ -96,6 +97,10 @@ class AudioBookChapter(models.Model):
             super(AudioBookChapter, self).save(*args, **kwargs)
             self.recording_file = recording_file
         super(AudioBookChapter, self).save(*args, **kwargs)
+
+    @property
+    def get_recording_file(self):
+        return f'{settings.MEDIA_URL}{self.recording_file}'
 
 
 class Book(models.Model):

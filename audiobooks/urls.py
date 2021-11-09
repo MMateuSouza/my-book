@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:book_id>/recording', views.recording, name='new_recording'),
     path('<int:book_id>/recording/<int:audiobook_id>/change', views.recording, name='change_recording'),
     path('<int:audiobook_id>/play', views.play, name='play'),
+    path('<int:audiobook_id>/play/<int:chapter_id>', views.play, name='get_chapter_url'),
 ]
