@@ -7,6 +7,19 @@
   var elapsedTime = document.querySelector('#elapsed-time');
   var totalTime = document.querySelector('#total-time');
   var chaptersTable = document.querySelector('#chapters-table');
+  var mediaUrl = document.querySelector('#media-url');
+  var audioElement = document.querySelector('#audio-element');
+
+  function getAudioDuration() {
+    let date = new Date(null);
+    date.setSeconds(audioElement.duration);
+
+    return date.toISOString().substr(11, 8);
+  }
+
+  function previousAudioBookChapter() {
+    console.log('previousAudioBookChapter');
+  }
 
   function changePlayPauseButtonState() {
     let newActiveState = playPauseButton.querySelector('i.d-none');
@@ -18,9 +31,20 @@
     isPlaying = !isPlaying;
   }
 
-  playPauseButton.onclick = function() {
+  function playOrPauseAudioBookChapter() {
     changePlayPauseButtonState();
+
+    isPlaying && audioElement.pause();
+    !isPlaying && audioElement.play();
   }
+
+  function nextAudioBookChapter() {
+    console.log('nextAudioBookChapter');
+  }
+
+  skipBackButton.onclick = previousAudioBookChapter;
+  playPauseButton.onclick = playOrPauseAudioBookChapter;
+  skipForwardButton.onclick = nextAudioBookChapter;
 
   chaptersTable.ondblclick = function(e) {
     let trElement = e.target.parentNode;
