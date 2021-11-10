@@ -36,3 +36,10 @@ def create(request, id=None):
 
     groups = Group.objects.all()
     return render(request, context=locals(), template_name='users/create.html')
+
+
+@login_required
+def delete(request, id):
+    user = User.objects.get(id=id).delete()
+    messages.success(request, f'Usuário excluído com sucesso!')
+    return redirect('users:index')
