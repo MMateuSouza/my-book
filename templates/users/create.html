@@ -112,10 +112,10 @@
                                 <label for="group" class="form-label">Perfil de Usuário</label>
                                 <select id="group" name="group" class="form-select form-select-sm">
                                     {% if groups %}
-                                        <option disabled>--- Selecione ---</option>
+                                        <option class="text-center" disabled {% if not user.group %}selected{% endif %}>--- Selecione ---</option>
                                         {% for group in groups %}
                                             <option value="{{ group.id }}"
-                                                    class="text-capitalize">{{ group.name }}</option>
+                                                    class="text-capitalize" {% if user.group.id == group.id %}selected{% endif %}>{{ group.name }}</option>
                                         {% endfor %}
                                     {% else %}
                                         <option selected disabled>Nenhum grupo cadastrado</option>
