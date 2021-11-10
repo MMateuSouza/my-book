@@ -51,12 +51,30 @@
                                             <a href="{% url 'audiobooks:change' book.id %}" class="btn btn-sm btn-outline-warning">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a href="#" class="btn btn-sm btn-outline-danger">
+                                            <a class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-book-modal-{{ book.id }}">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
+                                <div class="modal fade" id="delete-book-modal-{{ book.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="delete-book-modal-{{ book.id }}Label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete-book-modal-{{ book.id }}Label">Exclusão de Livro</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                            <p>Você tem certeza que deseja excluir o livro `<span class="fw-bold text-capitalize">{{ book.title }}?</span>`</p>
+                                            <p class="text-muted">Lembre-se: todos os audiobooks associados ao livro serão removidos.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <a type="button" href="{% url 'audiobooks:delete' book.id %}" class="btn btn-sm btn-danger">Excluir</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             {% endfor %}
                             {% else %}
                                 <tr class="text-center">

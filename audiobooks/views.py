@@ -38,6 +38,13 @@ def create(request, id=None):
 
 
 @login_required
+def delete(request, id):
+    book = Book.objects.get(id=id).delete()
+    messages.success(request, f'Livro excluído com sucesso!')
+    return redirect('audiobooks:index')
+
+
+@login_required
 def audiobooks(request, id):
     book = Book.objects.get(id=id)
     audiobooks = AudioBook.objects.filter(book=book)
