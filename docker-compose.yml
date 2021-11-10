@@ -1,0 +1,55 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: my-book-nginx
+    volumes:
+      - ./infra/nginx:/etc/nginx/templates
+      - ./${MEDIA_URL}:/var/www/${MEDIA_URL}
+      - ./${STATIC_ROOT}:/var/www/${STATIC_ROOT}
+    ports:
+      - '80:80'
+    environment:
+      - NGINX_HOST=${NGINX_HOST}
+      - NGINX_PORT=${NGINX_PORT}
+      - UWSGI_PORT=${UWSGI_PORT}
+      - MEDIA_URL=${MEDIA_URL}
+      - STATIC_ROOT=${STATIC_ROOT}
+    networks:
+      - my-book-network
+    depends_on:
+      - app
+  app:
+    build: .
+    entrypoint: sh entrypoint.sh
+    image: my-book-app
+    container_name: my-book-app
+    volumes:
+      - .:/var/www
+    environment:
+      ALLOWED_HOSTS: ${NGINX_HOST}
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql/${MYSQL_DATABASE}
+    networks:
+      - my-book-network
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:latest
+    container_name: my-book-mysql
+    volumes:
+      - ./infra/mysql:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - my-book-network
+
+networks:
+  my-book-network:
+    driver: bridge

@@ -16,6 +16,8 @@ typing-extensions = "==3.10.0.0"
 Django = "==3.2.5"
 pillow = "==8.4.0"
 pydub = "==0.25.1"
+uwsgi = "==2.0.20"
+mysqlclient = "==2.0.3"
 
 [dev-packages]
 autopep8 = "*"

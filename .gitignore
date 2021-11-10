@@ -547,4 +547,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+infra/mysql/*
+static_prd/*
+
 # End of https://www.toptal.com/developers/gitignore/api/django,python,linux,windows,visualstudiocode,pycharm,pycharm+iml,pycharm+all,git,sublimetext,database

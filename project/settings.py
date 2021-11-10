@@ -111,7 +111,7 @@ USE_TZ = config('USE_TZ', cast=bool, default=True)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = 'static_prd/'
+STATIC_ROOT = config('STATIC_ROOT', cast=str, default='static_prd/')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = ( os.path.join('static'),)
 
@@ -144,7 +144,7 @@ DEFAULT_ADMINISTRATOR_EMAIL = config('DEFAULT_ADMINISTRATOR_PASSWORD', cast=str,
 
 DEFAULT_MEDIA_ROOT = f'{BASE_DIR}/media'
 MEDIA_ROOT = config('MEDIA_ROOT', cast=str, default=DEFAULT_MEDIA_ROOT)
-MEDIA_URL = '/media/'
+MEDIA_URL = config('MEDIA_URL', cast=str, default='/media/')
 
 FRONT_COVER_DIRECTORY_PATH = f'{MEDIA_ROOT}/front_convers'
 RECORDING_FILE_DIRECTORY_PATH = f'{MEDIA_ROOT}/audiobooks'
