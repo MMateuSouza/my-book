@@ -66,7 +66,7 @@ class UserForm(forms.ModelForm):
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
-        if not password1 or not password2:
+        if (not password1 or not password2) and not self.instance.id:
             raise ValidationError(
                 self.error_messages['required'],
                 code='required',
@@ -104,7 +104,8 @@ class UserForm(forms.ModelForm):
         super().save()
 
         password = self.cleaned_data.get('password2')
-        self.instance.set_password(password)
+        if password:
+            self.instance.set_password(password)
 
         group = self.cleaned_data.get('group')
         groups = self.instance.groups.all()
