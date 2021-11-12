@@ -29,7 +29,7 @@ services:
     volumes:
       - .:/var/www
     environment:
-      ALLOWED_HOSTS: ${NGINX_HOST}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: ${DEBUG}
       DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql/${MYSQL_DATABASE}
