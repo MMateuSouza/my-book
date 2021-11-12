@@ -1,6 +1,6 @@
 from constance import config
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -9,6 +9,7 @@ from audiobooks.forms import AudioBook, AudioBookChapter, AudioBookForm, Book, B
 
 
 @login_required
+@permission_required('audiobooks.view_book')
 def index(request):
     books_list = Book.objects.all().order_by('id')
     paginator = Paginator(books_list, config.ELEMENTS_PER_PAGE)
@@ -20,6 +21,8 @@ def index(request):
 
 
 @login_required
+@permission_required('audiobooks.add_book')
+@permission_required('audiobooks.change_book')
 def create(request, id=None):
     book = Book.objects.get(id=id) if id else Book()
 
@@ -38,6 +41,7 @@ def create(request, id=None):
 
 
 @login_required
+@permission_required('audiobooks.delete_book')
 def delete(request, id):
     Book.objects.get(id=id).delete()
     messages.success(request, f'Livro excluído com sucesso!')
@@ -45,6 +49,7 @@ def delete(request, id):
 
 
 @login_required
+@permission_required('audiobooks.delete_audiobook')
 def delete_audiobook(request, audiobook_id):
     audiobook = AudioBook.objects.get(id=audiobook_id)
     book_id = audiobook.book.id
@@ -54,6 +59,7 @@ def delete_audiobook(request, audiobook_id):
 
 
 @login_required
+@permission_required('audiobooks.view_audiobook')
 def audiobooks(request, id):
     book = Book.objects.get(id=id)
     audiobooks = AudioBook.objects.filter(book=book)
@@ -63,6 +69,8 @@ def audiobooks(request, id):
 
 
 @login_required
+@permission_required('audiobooks.add_audiobook')
+@permission_required('audiobooks.change_audiobook')
 def recording(request, book_id, audiobook_id=None):
     book = Book.objects.get(id=book_id)
     audiobook = AudioBook.objects.get(id=audiobook_id) if audiobook_id else AudioBook()
@@ -83,6 +91,7 @@ def recording(request, book_id, audiobook_id=None):
 
 
 @login_required
+@permission_required('audiobooks.view_audiobook')
 def play(request, audiobook_id, chapter_id=None):
     audiobook = AudioBook.objects.get(id=audiobook_id)
 

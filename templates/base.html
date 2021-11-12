@@ -25,9 +25,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav">
+                    {% if perms.audiobooks.view_audiobook %}
                     <a class="nav-link" id="main" href="{% url 'main:index' %}">Home</a>
+                    {% endif %}
+                    {% if perms.users.view_user %}
                     <a class="nav-link" id="users" href="{% url 'users:index' %}">Usuários</a>
+                    {% endif %}
+                    {% if perms.audiobooks.view_book %}
                     <a class="nav-link" id="audiobooks" href="{% url 'audiobooks:index' %}">Audiobooks</a>
+                    {% endif %}
                     {% if request.user.is_authenticated %}
                         <a class="nav-link" href="{% url 'main:sign_out' %}">Logout</a>
                     {% endif %}

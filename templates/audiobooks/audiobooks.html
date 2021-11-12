@@ -16,7 +16,9 @@
 
                         <div>
                             <a class="btn btn-sm btn-secondary" href="{% url 'audiobooks:index' %}">Voltar</a>
+                            {% if perms.audiobooks.add_audiobook %}
                             <a class="btn btn-sm btn-primary" href="{% url 'audiobooks:new_recording' book.id %}">Novo</a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="card-body">
@@ -58,12 +60,16 @@
                                     <td class="text-capitalize">Pendente</td>
                                     <td>
                                         <div class="d-grid gap-2 d-md-block">
+                                            {% if perms.audiobooks.change_audiobook %}
                                             <a href="{% url 'audiobooks:change_recording' book.id audiobook.id %}" class="btn btn-sm btn-outline-warning">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
+                                            {% endif %}
+                                            {% if perms.audiobooks.delete_audiobook %}
                                             <a class="btn btn-sm btn-outline-danger"  data-bs-toggle="modal" data-bs-target="#delete-audiobook-modal-{{ audiobook.id }}">
                                                 <i class="bi bi-trash"></i>
                                             </a>
+                                            {% endif %}
                                         </div>
                                     </td>
                                 </tr>
