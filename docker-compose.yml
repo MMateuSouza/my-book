@@ -5,10 +5,12 @@ services:
     container_name: my-book-nginx
     volumes:
       - ./infra/nginx:/etc/nginx/templates
+      - ./infra/certs:/etc/nginx/certs
       - ./${MEDIA_URL}:/var/www/${MEDIA_URL}
       - ./${STATIC_ROOT}:/var/www/${STATIC_ROOT}
     ports:
       - '80:80'
+      - '443:443'
     environment:
       - NGINX_HOST=${NGINX_HOST}
       - NGINX_PORT=${NGINX_PORT}

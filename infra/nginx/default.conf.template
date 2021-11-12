@@ -4,7 +4,7 @@ upstream django {
 
 server {
     listen      ${NGINX_PORT};
-    server_name ${NGINX_HOST};
+    server_name ${NGINX_HOST} www.${NGINX_HOST};
     charset     utf-8;
 
     client_max_body_size 2048M;
@@ -26,4 +26,20 @@ server {
         uwsgi_param X-Forwarded-For $proxy_add_x_forwarded_for;
         uwsgi_param X-Forwarded-Proto $http_x_forwarded_proto;
     }
+
+    listen 443 ssl;
+    ssl_certificate /etc/nginx/certs/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/privkey.pem;
+    include /etc/nginx/certs/options-ssl-nginx.conf;
+    ssl_dhparam /etc/nginx/certs/ssl-dhparams.pem;
+}
+
+server {
+    if ($host = mbaudiobooks.com.br) {
+        return 301 https://$host$request_uri;
+    }
+
+    listen      80;
+    server_name ${NGINX_HOST} www.${NGINX_HOST};
+    return 404;
 }
