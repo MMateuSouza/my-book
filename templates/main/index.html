@@ -31,9 +31,9 @@
                         {% for audiobook in page_obj %}
                         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
                             <div class="card mb-3">
-                                <img src="{{ MEDIA_URL }}{{ audiobook.book.front_cover }}" width="200px" class="card-img-top" alt="Livro: {{ audiobook.book.title }}">
+                                <img src="{{ MEDIA_URL }}{{ audiobook.book.front_cover }}" width="200px" class="card-img-top thumbnail" alt="Livro: {{ audiobook.book.title }}">
                                 <div class="card-body">
-                                    <p class="mb-1 h5 text-center">{{ audiobook.book.title }}</p>
+                                    <p class="mb-1 h5 text-capitalize text-center">{{ audiobook.book.title }}</p>
                                     <p class="my-1"><span class="fw-bold">Narrador:</span> {{ audiobook.storyteller.full_name }}</p>
                                     <p class="mt-1 mb-3"><span class="fw-bold">Tipo de Narração:</span> {{ audiobook.get_narration_type_display }}</p>
 
