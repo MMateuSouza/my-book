@@ -4,6 +4,7 @@
 {% block title %}Index{% endblock %}
 
 {% block style %}
+<link rel="stylesheet" href="{% static 'css/audiobooks/play.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -30,7 +31,7 @@
                     </div>
                     <div class="col-8">
                         <div class="container">
-                            <div class="row">
+                            <div id="chapters-div" class="row">
                                 <table class="table table-sm table-hover">
                                     <thead>
                                     <tr class="text-center">
