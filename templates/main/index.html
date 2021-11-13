@@ -4,6 +4,7 @@
 {% block title %}Audiobooks{% endblock %}
 
 {% block style %}
+<link rel="stylesheet" href="{% static 'css/main/index.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -27,11 +28,11 @@
                 </div>
                 <div class="card-body">
                 {% if has_audiobooks %}
-                    <div class="row d-flex flex-wrap justify-content-evenly">
+                    <div class="row d-flex flex-wrap justify-content-evenly align-items-center">
                         {% for audiobook in page_obj %}
                         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                            <div class="card mb-3">
-                                <img src="{{ MEDIA_URL }}{{ audiobook.book.front_cover }}" width="200px" class="card-img-top thumbnail" alt="Livro: {{ audiobook.book.title }}">
+                            <div class="card mb-3 ">
+                                <img src="{{ MEDIA_URL }}{{ audiobook.book.front_cover }}" class="card-img-top thumbnail front-cover" alt="Livro: {{ audiobook.book.title }}">
                                 <div class="card-body">
                                     <p class="mb-1 h5 text-capitalize text-center">{{ audiobook.book.title }}</p>
                                     <p class="my-1"><span class="fw-bold">Narrador:</span> {{ audiobook.storyteller.full_name }}</p>
