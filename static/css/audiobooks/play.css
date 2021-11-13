@@ -2,3 +2,8 @@
     height: 200px;
     overflow-y: scroll;
 }
+
+.front-cover {
+    height: 200px;
+    object-fit: contain;
+}
