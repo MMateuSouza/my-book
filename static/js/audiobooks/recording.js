@@ -19,7 +19,6 @@
     e.preventDefault();
     let isValid = true;
 
-    // TODO: Implementar verificação dos inputs
     fileInputElements.forEach(function(el) {
       let audioRegex = new RegExp('^audio\/[^]*$');
       if (!el.value || !audioRegex.test(el.files[0].type)) {

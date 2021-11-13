@@ -193,8 +193,6 @@
     chaptersObject.append(listItemElement);
   }
 
-  // TODO: INÍCIO - Rever o que poder ser simplificado
-
   function convertChaptersToHTML(chapters) {
     let listItemElements = [];
 
@@ -232,8 +230,6 @@
     let chaptersElements = convertChaptersToHTML(chapters);
     chaptersElements.forEach((el) => chaptersObject.append(el));
   }
-
-   // TODO: FIM - Rever o que poder ser simplificado
 
   function convertChapter(element) {
     let sequence = 0;

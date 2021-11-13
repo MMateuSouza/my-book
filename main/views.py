@@ -36,8 +36,7 @@ def sign_in(request):
 
         user = authenticate(request, username=username, password=password)
         if user:
-            # TODO: Verificar como adicionar a permanência de sessão
-            # request.session.set_expiry()
+            request.session.set_expiry(config.TIME_TO_EXPIRE_SESSION) if remember_me else request.session.set_expiry(0)
             login(request, user)
             return redirect('main:index')
         messages.error(request, 'Usuário ou senha incorretos.')
