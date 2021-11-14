@@ -11,7 +11,7 @@
   var audioElement = document.querySelector('#audio-element');
   var currentAudioBookChapter = null;
 
-  audioElement.addEventListener('loadedmetadata', (e) => {
+  audioElement.addEventListener('loadedmetadata', () => {
     // Início - Tratativa para problema de duração retornando `Infinity`
     if (audioElement.duration == Infinity) {
       audioElement.currentTime = 1e101;
@@ -27,12 +27,16 @@
     setAudioBookTotalTime();
   });
 
-  audioElement.addEventListener('timeupdate', (e) => {
+  audioElement.addEventListener('timeupdate', () => {
     updateProgressBar();
   });
 
-  audioElement.addEventListener('canplay', (e) => {
+  audioElement.addEventListener('canplay', () => {
     isPlaying && audioElement.play();
+  });
+
+  audioElement.addEventListener('ended', () => {
+    getNextAudioBookChapter();
   });
 
   function setAudioBookChapterUrlById(chapterId) {
