@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('contenttypes', '__latest__'),
         ('auth', '__latest__'),
-        ('audiobooks', '__latest__'),
+        ('audiobooks', '0001_initial'),
         ('users', '0003_auto_20211019_0209'),
     ]
 

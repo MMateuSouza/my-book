@@ -1,6 +1,6 @@
 from django import forms
 
-from audiobooks.models import AudioBook, AudioBookChapter, Book, BookAuthor, Chapter
+from audiobooks.models import AudioBook, AudioBookChapter, Book, BookAuthor, Chapter, Favorite
 
 
 class BookForm(forms.ModelForm):

@@ -14,4 +14,5 @@ urlpatterns = [
     path('<int:audiobook_id>/delete', views.delete_audiobook, name='delete_audiobook'),
     path('<int:audiobook_id>/play', views.play, name='play'),
     path('<int:audiobook_id>/play/<int:chapter_id>', views.play, name='get_chapter_url'),
+    path('favorite', views.favorite, name='favorite'),
 ]

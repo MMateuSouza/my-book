@@ -8,6 +8,9 @@
 {% endblock %}
 
 {% block content %}
+<input class="d-none" type="text" name="favorite-url" id="favorite-url" value="{% url 'audiobooks:favorite' %}" disabled readonly>
+<input class="d-none" type="text" name="user-id" id="user-id" value="{{ request.user.id }}" disabled readonly>
+{% csrf_token %}
 <section class="container">
     <div class="row">
         <div class="col">
