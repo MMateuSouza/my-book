@@ -44,7 +44,7 @@
                                     <div class="row">
                                         <div class="col-12 d-flex justify-content-between">
                                             <button type="button" class="fav-btn col-2 btn btn-sm btn-outline-link text-warning">
-                                                <i class="bi bi-star"></i>
+                                                <i class="bi {% if audiobook in request.user.favorite_audiobooks %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                                                 <input class="d-none" type="number" value="{{ audiobook.id }}" readonly disabled>
                                             </button>
                                             <a href="{% url 'audiobooks:play' audiobook.id %}" class="col-10 btn btn-sm btn-block btn-primary"><i class="bi bi-play"></i> Reproduzir</a>
