@@ -78,6 +78,6 @@
 {% endblock %}
 
 {% block script %}
-<script src="{% static 'js/main/index.js' %}"></script>
+<script>document.querySelector('#main').classList.add('active');</script>
 <script src="{% static 'js/audiobooks/play.js' %}"></script>
 {% endblock %}

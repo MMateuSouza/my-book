@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.files import storage
-from django.db import models
+from django.db import IntegrityError, models
 from pydub import AudioSegment
 
 import json
@@ -8,6 +8,7 @@ import os
 import tempfile
 
 from project.storage import OverwriteStorage
+from users.models import User
 
 
 def directory_path(instance, filename, path):
@@ -35,6 +36,13 @@ class AudioBook(models.Model):
     book = models.ForeignKey(verbose_name='Livro', to='audiobooks.Book', on_delete=models.CASCADE)
     storyteller = models.ForeignKey(verbose_name='Narrador', to='users.User', on_delete=models.CASCADE)
     narration_type = models.CharField(verbose_name='Tipo de Narração', max_length=1, choices=TYPES_OF_VOICES)
+
+    @staticmethod
+    def get_audiobook_by_id(id):
+        try:
+            return AudioBook.objects.get(id=id)
+        except AudioBook.DoesNotExist:
+            return None
 
     @staticmethod
     def persist_audiobook_chapter(audiobook, description, file):
@@ -237,3 +245,30 @@ class Chapter(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(verbose_name='Usuário', to='users.User', related_name='favorites', on_delete=models.CASCADE)
+    audiobook = models.ForeignKey(verbose_name='Audiobook', to='audiobooks.AudioBook', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['user', 'audiobook']
+
+    @staticmethod
+    def add_audiobook_to_user_favorites(user_id, audiobook_id):
+        user, audiobook = User.get_user_by_id(user_id), AudioBook.get_audiobook_by_id(audiobook_id)
+        removed = False
+
+        if not user or not audiobook:
+            return False, 'Usuário e/ou AudioBook não encontrado(s)'
+
+        message = ''
+        try:
+            Favorite(user=user, audiobook=audiobook).save()
+            message = 'AudioBook adicionado aos favoritos'
+        except IntegrityError:
+            Favorite.objects.get(user=user, audiobook=audiobook).delete()
+            removed = True
+            message = 'AudioBook desfavoritado com sucesso'
+
+        return True, removed, message

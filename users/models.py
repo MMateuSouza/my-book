@@ -13,3 +13,14 @@ class User(AbstractUser):
     @property
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
+
+    @staticmethod
+    def get_user_by_id(id):
+        try:
+            return User.objects.get(id=id)
+        except User.DoesNotExist:
+            return None
+
+    @property
+    def favorite_audiobooks(self):
+        return [ favorite.audiobook for favorite in self.favorites.all() ]

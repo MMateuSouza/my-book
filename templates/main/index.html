@@ -8,6 +8,9 @@
 {% endblock %}
 
 {% block content %}
+<input class="d-none" type="text" name="favorite-url" id="favorite-url" value="{% url 'audiobooks:favorite' %}" disabled readonly>
+<input class="d-none" type="text" name="user-id" id="user-id" value="{{ request.user.id }}" disabled readonly>
+{% csrf_token %}
 <section class="container">
     <div class="row">
         <div class="col">
@@ -38,8 +41,14 @@
                                     <p class="my-1"><span class="fw-bold">Narrador:</span> {{ audiobook.storyteller.full_name }}</p>
                                     <p class="mt-1 mb-3"><span class="fw-bold">Tipo de Narração:</span> {{ audiobook.get_narration_type_display }}</p>
 
-                                    <div class="d-grid">
-                                        <a href="{% url 'audiobooks:play' audiobook.id %}" class="btn btn-sm btn-block btn-primary"><i class="bi bi-play"></i> Reproduzir</a>
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-between">
+                                            <button type="button" class="fav-btn col-2 btn btn-sm btn-outline-link text-warning">
+                                                <i class="bi {% if audiobook in request.user.favorite_audiobooks %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                                                <input class="d-none" type="number" value="{{ audiobook.id }}" readonly disabled>
+                                            </button>
+                                            <a href="{% url 'audiobooks:play' audiobook.id %}" class="col-10 btn btn-sm btn-block btn-primary"><i class="bi bi-play"></i> Reproduzir</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

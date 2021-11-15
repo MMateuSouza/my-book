@@ -4,8 +4,11 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.csrf import csrf_exempt
 
-from audiobooks.forms import AudioBook, AudioBookChapter, AudioBookForm, Book, BookForm
+import json
+
+from audiobooks.forms import AudioBook, AudioBookChapter, AudioBookForm, Book, BookForm, Favorite
 
 
 @login_required
@@ -100,3 +103,13 @@ def play(request, audiobook_id, chapter_id=None):
         return JsonResponse({'recording_file': audiobook_chapter.get_recording_file}, safe=False)
 
     return render(request, context=locals(), template_name='audiobooks/play.html')
+
+
+@login_required
+@csrf_exempt
+def favorite(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user_id, audiobook_id = data['userId'] if 'userId' in data else None, data['audioBookId'] if 'audioBookId' in data else None
+        success, removed, message = Favorite.add_audiobook_to_user_favorites(user_id, audiobook_id)
+        return JsonResponse({'success': success, 'removed': removed, 'message': message})
