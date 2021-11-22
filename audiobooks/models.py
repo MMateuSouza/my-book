@@ -68,6 +68,9 @@ class AudioBook(models.Model):
             if i == 0:
                 audio_file = AudioSegment.from_file(file)
                 format = str(file).split('.')[-1]
+                # Forçar o formato a ser mp4 quando o arquivo for extensão m4a
+                if format == 'm4a':
+                    format = 'mp4'
                 continue
 
             audio_file_aux = AudioSegment.from_file(file)
