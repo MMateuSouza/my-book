@@ -27,10 +27,11 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav">
                     {% if perms.audiobooks.view_audiobook %}
-                    <a class="nav-link" id="main" href="{% url 'main:index' %}">Home</a>
+                    <a class="nav-link" id="main" href="{% url 'main:index' %}">Tela Inicial</a>
                     {% endif %}
                     {% if perms.users.view_user %}
                     <a class="nav-link" id="users" href="{% url 'users:index' %}">Usuários</a>
+                    <a class="nav-link" id="listeners" href="{% url 'users:listeners' %}">Ouvintes</a>
                     {% endif %}
                     {% if perms.audiobooks.view_book %}
                     <a class="nav-link" id="audiobooks" href="{% url 'audiobooks:index' %}">Audiobooks</a>

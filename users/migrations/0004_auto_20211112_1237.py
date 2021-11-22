@@ -6,7 +6,7 @@ from django.db import migrations
 
 GROUPS_PERMISSIONS = [
     {'group': 'Administrador', 'permissions': ['__all__'], },
-    {'group': 'Consumidor', 'permissions': [
+    {'group': 'Ouvinte', 'permissions': [
         'view_audiobook',
     ], },
     {'group': 'Narrador', 'permissions': [

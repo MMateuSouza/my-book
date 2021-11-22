@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from django.db import migrations
 
-GROUPS = ['Administrador', 'Consumidor', 'Narrador']
+GROUPS = ['Administrador', 'Ouvinte', 'Narrador']
 
 
 def create_initial_groups(apps, schema_editor):

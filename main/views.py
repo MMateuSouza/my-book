@@ -52,7 +52,7 @@ def sign_out(request):
 
 def sign_up(request):
     user = User()
-    group = Group.objects.filter(name='Consumidor').first()
+    group = Group.objects.filter(name='Ouvinte').first()
 
     if request.method == 'GET':
         form = UserForm(instance=user)

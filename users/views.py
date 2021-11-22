@@ -11,13 +11,25 @@ from users.forms import User, UserForm
 @login_required
 @permission_required('users.view_user')
 def index(request):
-    users_list = User.objects.all().order_by('id')
+    users_list = User.objects.all().exclude(groups__name='Ouvinte').order_by('id')
     paginator = Paginator(users_list, config.ELEMENTS_PER_PAGE)
     has_users = paginator.count != 0
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     return render(request, context={'page_obj': page_obj, 'has_users': has_users}, template_name='users/index.html')
+
+
+@login_required
+@permission_required('users.view_user')
+def listeners(request):
+    listeners_list = User.objects.filter(groups__name='Ouvinte').order_by('id')
+    paginator = Paginator(listeners_list, config.ELEMENTS_PER_PAGE)
+    has_listeners = paginator.count != 0
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, context={'page_obj': page_obj, 'has_listeners': has_listeners}, template_name='users/listeners.html')
 
 
 @login_required

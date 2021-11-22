@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ouvintes{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block content %}
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Ouvintes</span>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr class="text-center">
+                                <th scope="col">#</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Usuário</th>
+                                <th scope="col">E-mail</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if has_listeners %}
+                            {% for user in page_obj %}
+                                <tr class="text-center">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td class="text-capitalize">{{ user.first_name }} {{ user.last_name }}</td>
+                                    <td class="text-lowercase">{{ user.username }}</td>
+                                    <td class="text-lowercase">{{ user.email }}</td>
+                                </tr>
+                                <div class="modal fade" id="delete-user-modal-{{ user.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="delete-user-modal-{{ user.id }}Label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete-user-modal-{{ user.id }}Label">Exclusão de Usuário</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                            <p>Você tem certeza que deseja excluir o usuário `<span class="fw-bold text-capitalize">{{ user.full_name }}?</span>`</p>
+                                            <p class="text-muted">Lembre-se: todas as modificações relacionadas ao usuário serão removidas.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <a type="button" href="{% url 'users:delete' user.id %}" class="btn btn-sm btn-danger">Excluir</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% else %}
+                                <tr class="text-center">
+                                    <td colspan="7">Não há ouvintes cadastrados</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination pagination-sm justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primeiro</a></li>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                                    </li>
+                                {% endif %}
+                                <li class="page-item disabled"><a class="page-link"
+                                                                  href="#">Página {{ page_obj.number }}
+                                    de {{ page_obj.paginator.num_pages }}</a></li>
+                                {% if page_obj.has_next %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ page_obj.next_page_number }}">Próximo</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ page_obj.paginator.num_pages }}">Último
+                                        &raquo;</a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/users/listeners.js' %}"></script>
+{% endblock %}
