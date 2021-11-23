@@ -11,7 +11,7 @@ class BookForm(forms.ModelForm):
         model = Book
         fields = ['title', 'publishing_company', 'edition',
                   'isbn_10', 'isbn_13', 'front_cover', 'authors_names',
-                  'chapters_str',]
+                  'chapters_str', 'year']
 
         error_messages = {
             'title': {
@@ -31,6 +31,9 @@ class BookForm(forms.ModelForm):
             },
             'front_cover': {
                 'required': 'Foto de capa é um campo obrigatório'
+            },
+            'year': {
+                'required': 'Ano é um campo obrigatório'
             },
         }
 

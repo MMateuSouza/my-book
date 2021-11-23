@@ -13,9 +13,18 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <span>Usuários</span>
-                        {% if perms.users.add_user %}
-                        <a class="btn btn-sm btn-primary" href="{% url 'users:create' %}">Novo</a>
-                        {% endif %}
+
+                        <div class="d-flex">
+                            <form>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" placeholder="Buscar usuários" name="q" value="{% if q %}{{ q }}{% endif %}">
+                                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+                                    {% if perms.users.add_user %}
+                                    <a class="btn btn-primary" href="{% url 'users:create' %}">Novo</a>
+                                    {% endif %}
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="card-body table-responsive">
                         <table class="table">

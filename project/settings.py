@@ -125,7 +125,7 @@ AUTH_USER_MODEL = 'users.User'
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'ELEMENTS_PER_PAGE': (10, 'Quantidade de itens exibidos por página (Usuários, audiobooks, etc).', int),
-    'SYSTEM_NAME': ('MyBook', 'O nome do sistema mostrado no canto superior esquerdo', str),
+    'SYSTEM_NAME': ('IN VOICE', 'O nome do sistema mostrado no canto superior esquerdo', str),
     'TIME_TO_EXPIRE_SESSION': (31556952, 'Tempo em segundos para expirar sessão (Padrão 1 ano)', int),
 }
 

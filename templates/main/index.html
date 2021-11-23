@@ -39,7 +39,8 @@
                                 <div class="card-body">
                                     <p class="mb-1 h5 text-capitalize text-center">{{ audiobook.book.title }}</p>
                                     <p class="my-1"><span class="fw-bold">Narrador:</span> {{ audiobook.storyteller.full_name }}</p>
-                                    <p class="mt-1 mb-3"><span class="fw-bold">Tipo de Narração:</span> {{ audiobook.get_narration_type_display }}</p>
+                                    <p class="my-1"><span class="fw-bold">Tipo de Narração:</span> {{ audiobook.get_narration_type_display }}</p>
+                                    <p class="mt-1 mb-3"><span class="fw-bold">Ano:</span> {{ audiobook.book.year }}</p>
 
                                     <div class="row">
                                         <div class="col-12 d-flex justify-content-between">

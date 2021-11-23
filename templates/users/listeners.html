@@ -11,8 +11,17 @@
         <div class="row">
             <div class="col">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex align-items-center justify-content-between">
                         <span>Ouvintes</span>
+
+                        <div class="d-flex">
+                            <form>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" placeholder="Buscar ouvintes" name="q" value="{% if q %}{{ q }}{% endif %}">
+                                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="card-body table-responsive">
                         <table class="table">

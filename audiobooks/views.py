@@ -2,6 +2,7 @@ from constance import config
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
@@ -9,18 +10,31 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 from audiobooks.forms import AudioBook, AudioBookChapter, AudioBookForm, Book, BookForm, Favorite
+from users.models import User
 
 
 @login_required
 @permission_required('audiobooks.view_book')
 def index(request):
+    q = request.GET.get('q', None)
+
     books_list = Book.objects.all().order_by('id')
+    if q:
+        books_list = books_list \
+            .filter(
+                Q(title__icontains=q) |
+                Q(publishing_company__icontains=q) |
+                Q(edition__icontains=q) |
+                Q(year__icontains=q) |
+                Q(isbn_10__icontains=q) |
+                Q(isbn_13__icontains=q)
+            )
     paginator = Paginator(books_list, config.ELEMENTS_PER_PAGE)
     has_books = paginator.count != 0
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, context={'page_obj': page_obj, 'has_books': has_books}, template_name='audiobooks/index.html')
+    return render(request, context={'page_obj': page_obj, 'has_books': has_books, 'q': q}, template_name='audiobooks/index.html')
 
 
 @login_required
@@ -76,6 +90,7 @@ def audiobooks(request, id):
 @permission_required('audiobooks.change_audiobook')
 def recording(request, book_id, audiobook_id=None):
     book = Book.objects.get(id=book_id)
+    storytellers = User.objects.filter(groups__name='Narrador').order_by('id')
     audiobook = AudioBook.objects.get(id=audiobook_id) if audiobook_id else AudioBook()
 
     if request.method == 'GET':

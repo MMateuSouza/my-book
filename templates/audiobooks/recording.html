@@ -12,7 +12,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <span>Gravação de Audiobook</span>
+                        <span>{% if audiobook.id %}Editar{% else %}Cadastrar{% endif %} Audiobook</span>
 
                         <a class="btn btn-sm btn-secondary" href="{% url 'audiobooks:audiobooks' book.id %}">Voltar</a>
                     </div>
@@ -28,8 +28,23 @@
                             <div class="col-4">
                                 <label for="{{ form.storyteller.id_for_label }}"
                                        class="form-label">{{ form.storyteller.label }}</label>
-                                <input class="d-none" type="number" name="{{ form.storyteller.html_name }}" value="{{ request.user.id }}">
-                                <input type="text" class="form-control form-control-sm text-capitalize" value="{% if audiobook.id %}{{ audiobook.storyteller.full_name }}{% else %}{{ request.user.full_name }}{% endif %}" readonly>
+                                <select id="{{ form.storyteller.id_for_label }}" name="{{ form.storyteller.html_name }}" class="form-select form-select-sm text-capitalize {% if form.storyteller.errors %}is-invalid{% endif %}">
+                                    {% if storytellers.count %}
+                                    <option class="text-center" disabled>--- Selecione ---</option>
+                                    {% for storyteller in storytellers %}
+                                    <option value="{{ storyteller.id }}" class="text-capitalize" {% if audiobook.storyteller and audiobook.storyteller.id == storyteller.id %}selected{% endif %}>{{ storyteller.full_name }}</option>
+                                    {% endfor %}
+                                    {% else %}
+                                    <option class="text-center" selected disabled>Não há narradores cadastrados</option>
+                                    {% endif %}
+                                </select>
+                                {% if form.storyteller.errors %}
+                                <div class="invalid-feedback">
+                                {% for error in form.narration_type.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                                </div>
+                                {% endif %}
                             </div>
                             <div class="col-4">
                                 <label for="{{ form.narration_type.id_for_label }}"
@@ -64,7 +79,7 @@
                             {% for chapter in book.ordered_chapters_list %}
                             <div class="d-flex flex-column">
                                 <div class="col-12 col-md-6 col-lg-4">
-                                    <label for="chapter_{{ chapter.id }}" class="form-label text-capitalize"><span class="fw-bold">Capítulo:</span> {{ chapter.title }}</label>
+                                    <label for="chapter_{{ chapter.id }}" class="form-label text-capitalize"><span class="fw-bold">Áudio:</span> {{ chapter.title }}</label>
                                     <input class="form-control form-control-sm" id="chapter_{{ chapter.id }}" name="chapter_{{ chapter.id }}" type="file" multiple accept="audio/*">
                                     <div class="invalid-feedback">
                                         Este campo é obrigatório e/ou não foi preenchido corretamente

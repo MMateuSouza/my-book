@@ -12,10 +12,19 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <span>Audiobooks</span>
-                        {% if perms.audiobooks.add_book %}
-                        <a class="btn btn-sm btn-primary" href="{% url 'audiobooks:create' %}">Novo</a>
-                        {% endif %}
+                        <span>Livros</span>
+
+                        <div class="d-flex">
+                            <form>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" placeholder="Buscar livros" name="q" value="{% if q %}{{ q }}{% endif %}">
+                                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+                                    {% if perms.audiobooks.add_book %}
+                                    <a class="btn btn-primary" href="{% url 'audiobooks:create' %}">Novo</a>
+                                    {% endif %}
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="card-body table-responsive">
                         <table class="table">
@@ -26,9 +35,9 @@
                                 <th scope="col">Editora</th>
                                 <th scope="col">Autores</th>
                                 <th scope="col">Edição</th>
+                                <th scope="col">Ano</th>
                                 <th scope="col">ISBN 10</th>
                                 <th scope="col">ISBN 13</th>
-                                <th scope="col">Nº de Capítulos</th>
                                 <th scope="col">Ações</th>
                             </tr>
                             </thead>
@@ -41,9 +50,9 @@
                                     <td class="text-capitalize">{{ book.publishing_company }}</td>
                                     <td class="text-capitalize">{{ book.authors }}</td>
                                     <td>{{ book.edition }}ª</td>
+                                    <td>{{ book.year }}</td>
                                     <td>{{ book.isbn_10 }}</td>
                                     <td>{{ book.isbn_13 }}</td>
-                                    <td>{{ book.chapters_quantity }}</td>
                                     <td>
                                         <div class="d-grid gap-2 d-md-block">
                                             {% if perms.audiobooks.view_audiobook %}
