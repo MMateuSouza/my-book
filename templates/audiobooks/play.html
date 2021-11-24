@@ -45,6 +45,8 @@
                                     <tr>
                                         <td class="text-center">{{ forloop.counter }}</td>
                                         <td class="d-none"><input class="recording-file" type="text" value="{{ MEDIA_URL }}{{ audiobook_chapter.recording_file }}" disabled readonly></td>
+                                        <td class="d-none"><input class="total-pages" type="number" value="{{ audiobook_chapter.pages_quantity }}" disabled readonly></td>
+                                        <td class="d-none"><input class="start-page" type="number" value="{{ audiobook_chapter.start_page }}" disabled readonly></td>
                                         <td class="text-capitalize chapter-title">{{ audiobook_chapter.chapter.title }}</td>
                                         <td>Página {{ audiobook_chapter.initial_page|default:0 }} a {{ audiobook_chapter.end_page|default:0 }}</td>
                                     </tr>
@@ -79,7 +81,7 @@
                         <div class="col-5 d-flex align justify-content-center">
                             <div>
                                 <p class="mb-1"><span class="fw-bold">Tocando:</span>&nbsp;<span class="text-capitalize" id="chapter-title"></span></p>
-                                <p class="mt-1"><span class="fw-bold">Página:</span> X/{{ audiobook.total_pages|default:0 }}</p>
+                                <p class="mt-1"><span class="fw-bold">Página:</span>&nbsp;<span id="current-chapter-page">X</span>/{{ audiobook.total_pages|default:0 }}</p>
                             </div>
                         </div>
                     </div>

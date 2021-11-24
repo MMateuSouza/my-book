@@ -11,6 +11,7 @@
   var audioElement = document.querySelector('#audio-element');
   var currentAudioBookChapter = null;
   var chapterTitleSpanElement = document.querySelector('#chapter-title');
+  var currentChapterPageSpanElement = document.querySelector('#current-chapter-page');
 
   audioElement.addEventListener('loadedmetadata', () => {
     // Início - Tratativa para problema de duração retornando `Infinity`
@@ -30,6 +31,7 @@
 
   audioElement.addEventListener('timeupdate', () => {
     updateProgressBar();
+    updateCurrentChapterPage();
   });
 
   audioElement.addEventListener('canplay', () => {
@@ -90,6 +92,23 @@
 
     progressBar.value = progress ? progress : 0;
     elapsedTime.innerHTML = getAudioDuration(currentTime);
+  }
+
+  function updateCurrentChapterPage() {
+    let totalPagesInputElement = currentAudioBookChapter.querySelector('input.total-pages');
+    let totalPages = parseInt(totalPagesInputElement.value) || 0;
+    let chapterStartPageInputElement = currentAudioBookChapter.querySelector('input.start-page');
+    let chapterStartPage = parseInt(chapterStartPageInputElement.value) || 0;
+    let secondsPerPage;
+    let currentChapterPage;
+
+    if (!totalPages || !chapterStartPage || !audioElement.duration) return;
+
+    secondsPerPage = audioElement.duration / totalPages;
+    currentChapterPage = Math.floor(audioElement.currentTime / secondsPerPage);
+    if (currentChapterPage <= totalPages) {
+      currentChapterPageSpanElement.innerHTML = chapterStartPage + currentChapterPage;
+    }
   }
 
   function getNextPreviousAudioBookChapter(reverse=false) {
