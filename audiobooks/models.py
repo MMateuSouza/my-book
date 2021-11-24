@@ -45,7 +45,7 @@ class AudioBook(models.Model):
             return None
 
     @staticmethod
-    def persist_audiobook_chapter(audiobook, description, file):
+    def persist_audiobook_chapter(audiobook, description, file, start_page, pages_quantity):
         _, chapter_id = description.split('_')
         chapter = Chapter.objects.get(id=chapter_id)
 
@@ -58,6 +58,9 @@ class AudioBook(models.Model):
 
         extension = str(file).split('.')[-1]
         audiobook_chapter.recording_file.save(f'tmp.{extension}', file)
+        audiobook_chapter.start_page = start_page
+        audiobook_chapter.pages_quantity = pages_quantity
+        audiobook_chapter.save()
 
     @staticmethod
     def convert_multiple_files_into_once(filename, files_lst):
@@ -83,6 +86,7 @@ class AudioBook(models.Model):
 
     @staticmethod
     def persist_audiobook_chapters(audiobook, files):
+        total_pages = 1
         for file in files:
             audio_file = None
             files_lst = files.getlist(file)
@@ -93,13 +97,16 @@ class AudioBook(models.Model):
             elif files_lst_length == 1:
                 audio_file = files_lst[0]
 
-            AudioBook.persist_audiobook_chapter(audiobook, file, audio_file)
+            AudioBook.persist_audiobook_chapter(audiobook, file, audio_file, total_pages, files_lst_length)
+            total_pages += files_lst_length
 
 
 class AudioBookChapter(models.Model):
     audiobook = models.ForeignKey(verbose_name='Audiobook', to='audiobooks.AudioBook', on_delete=models.CASCADE)
     chapter = models.ForeignKey(verbose_name='Capítulo', to='audiobooks.Chapter', on_delete=models.CASCADE)
     recording_file = models.FileField(verbose_name='Gravação', max_length=255, storage=OverwriteStorage(), upload_to=recording_file_directory_path)
+    start_page = models.IntegerField(verbose_name='Página Inicial do Capítulo', default=0)
+    pages_quantity = models.IntegerField(verbose_name='Qtd. Páginas do Capítulo', default=0)
 
     def save(self, *args, **kwargs):
         if self.pk is None:
