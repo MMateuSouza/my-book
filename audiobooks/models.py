@@ -124,11 +124,15 @@ class AudioBookChapter(models.Model):
 
     @property
     def initial_page(self):
-        return self.start_page
+        if self.start_page:
+            return self.start_page
+        return None
 
     @property
     def end_page(self):
-        return (self.initial_page + self.pages_quantity) - 1
+        if self.initial_page:
+            return (self.initial_page + self.pages_quantity) - 1
+        return None
 
     def save(self, *args, **kwargs):
         if self.pk is None:
