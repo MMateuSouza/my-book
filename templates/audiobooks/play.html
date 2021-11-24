@@ -36,7 +36,7 @@
                                     <thead>
                                     <tr class="text-center">
                                         <th scope="col">#</th>
-                                        <th scope="col">Capítulos</th>
+                                        <th scope="col" colspan="2">Sumário</th>
                                     </tr>
                                     </thead>
                                     <tbody id="chapters-table">
@@ -46,6 +46,7 @@
                                         <td class="text-center">{{ forloop.counter }}</td>
                                         <td class="d-none"><input class="chapter-id" type="number" value="{{ chapter.id }}" disabled readonly></td>
                                         <td class="text-capitalize">{{ chapter.title }}</td>
+                                        <td>Página X a Y</td>
                                     </tr>
                                     {% endfor %}
                                     {% else %}
@@ -56,18 +57,30 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 d-flex flex-column align-items-center">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button id="skip-back-button" type="button" class="btn btn-sm btn-link fs-2"><i class="bi bi-skip-start-circle"></i></i></button>
-                            <button id="play-pause-button" type="button" class="btn btn-sm btn-link fs-2">
-                                <i class="bi bi-play-circle"></i><i class="bi bi-pause-circle d-none"></i>
-                            </button>
-                            <button id="skip-forward-button" type="button" class="btn btn-sm btn-link fs-2"><i class="bi bi-skip-end-circle"></i></button>
+                    <div class="col-12 d-flex flex-wrap align-items-center">
+                        <div class="col-7 d-flex justify-content-end">
+                            <div class="d-flex flex-column">
+                                <div class="d-flex justify-content-center">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button id="skip-back-button" type="button" class="btn btn-sm btn-link fs-2"><i class="bi bi-skip-start-circle"></i></i></button>
+                                        <button id="play-pause-button" type="button" class="btn btn-sm btn-link fs-2">
+                                            <i class="bi bi-play-circle"></i><i class="bi bi-pause-circle d-none"></i>
+                                        </button>
+                                        <button id="skip-forward-button" type="button" class="btn btn-sm btn-link fs-2"><i class="bi bi-skip-end-circle"></i></button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span id="elapsed-time">00:00:00</span> &nbsp;
+                                    <progress id="progress-bar" max="100" value="0"></progress> &nbsp;
+                                    <span id="total-time">00:00:00</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <span id="elapsed-time">00:00:00</span> &nbsp;
-                            <progress id="progress-bar" max="100" value="0"></progress> &nbsp;
-                            <span id="total-time">00:00:00</span>
+                        <div class="col-5 d-flex align justify-content-center">
+                            <div>
+                                <p class="mb-1"><span class="fw-bold">Tocando:</span> Capítulo X - Start Of Selection</p>
+                                <p class="mt-1"><span class="fw-bold">Página:</span> X/Y</p>
+                            </div>
                         </div>
                     </div>
                 </div>
