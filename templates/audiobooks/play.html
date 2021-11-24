@@ -41,12 +41,12 @@
                                     </thead>
                                     <tbody id="chapters-table">
                                     {% if audiobook.book.has_chapters %}
-                                    {% for chapter in audiobook.book.ordered_chapters_list %}
+                                    {% for audiobook_chapter in audiobook.chapters %}
                                     <tr>
                                         <td class="text-center">{{ forloop.counter }}</td>
-                                        <td class="d-none"><input class="chapter-id" type="number" value="{{ chapter.id }}" disabled readonly></td>
-                                        <td class="text-capitalize">{{ chapter.title }}</td>
-                                        <td>Página X a Y</td>
+                                        <td class="d-none"><input class="recording-file" type="text" value="{{ MEDIA_URL }}{{ audiobook_chapter.recording_file }}" disabled readonly></td>
+                                        <td class="text-capitalize chapter-title">{{ audiobook_chapter.chapter.title }}</td>
+                                        <td>Página {{ audiobook_chapter.initial_page|default:0 }} a {{ audiobook_chapter.end_page|default:0 }}</td>
                                     </tr>
                                     {% endfor %}
                                     {% else %}
@@ -78,8 +78,8 @@
                         </div>
                         <div class="col-5 d-flex align justify-content-center">
                             <div>
-                                <p class="mb-1"><span class="fw-bold">Tocando:</span> Capítulo X - Start Of Selection</p>
-                                <p class="mt-1"><span class="fw-bold">Página:</span> X/Y</p>
+                                <p class="mb-1"><span class="fw-bold">Tocando:</span>&nbsp;<span id="chapter-title"></span></p>
+                                <p class="mt-1"><span class="fw-bold">Página:</span> X/{{ audiobook.total_pages|default:0 }}</p>
                             </div>
                         </div>
                     </div>

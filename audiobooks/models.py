@@ -37,6 +37,20 @@ class AudioBook(models.Model):
     storyteller = models.ForeignKey(verbose_name='Narrador', to='users.User', on_delete=models.CASCADE)
     narration_type = models.CharField(verbose_name='Tipo de Narração', max_length=1, choices=TYPES_OF_VOICES)
 
+    @property
+    def total_pages(self):
+        return AudioBookChapter.objects.filter(audiobook=self).last().end_page
+
+    @property
+    def chapters(self):
+        chapters = []
+
+        for chapter in self.book.ordered_chapters_list:
+            audiobook_chapter = AudioBookChapter.objects.filter(audiobook=self, chapter=chapter).first()
+            chapters.append(audiobook_chapter)
+
+        return chapters
+
     @staticmethod
     def get_audiobook_by_id(id):
         try:
@@ -107,6 +121,14 @@ class AudioBookChapter(models.Model):
     recording_file = models.FileField(verbose_name='Gravação', max_length=255, storage=OverwriteStorage(), upload_to=recording_file_directory_path)
     start_page = models.IntegerField(verbose_name='Página Inicial do Capítulo', default=0)
     pages_quantity = models.IntegerField(verbose_name='Qtd. Páginas do Capítulo', default=0)
+
+    @property
+    def initial_page(self):
+        return self.start_page
+
+    @property
+    def end_page(self):
+        return (self.initial_page + self.pages_quantity) - 1
 
     def save(self, *args, **kwargs):
         if self.pk is None:

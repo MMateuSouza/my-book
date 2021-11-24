@@ -10,6 +10,7 @@
   var audioBookId = document.querySelector('#audiobook-id').value || null;
   var audioElement = document.querySelector('#audio-element');
   var currentAudioBookChapter = null;
+  var chapterTitleSpanElement = document.querySelector('#chapter-title');
 
   audioElement.addEventListener('loadedmetadata', () => {
     // Início - Tratativa para problema de duração retornando `Infinity`
@@ -39,27 +40,19 @@
     getNextAudioBookChapter();
   });
 
-  function setAudioBookChapterUrlById(chapterId) {
-    let xhr = new XMLHttpRequest();
-    xhr.overrideMimeType('application/json');
-
-    xhr.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        let response = JSON.parse(xhr.responseText);
-        audioElement.src = response.recording_file;
-        audioElement.load();
-      }
-    }
-
-    xhr.open('GET', `/audiobooks/${audioBookId}/play/${chapterId}`, true);
-    xhr.send();
+  function setAudioBookChapterUrl(recordingFile) {
+    audioElement.src = recordingFile;
+    audioElement.load();
   }
 
   function getAudioBookChapter() {
-    let idInputElement = currentAudioBookChapter.querySelector('input.chapter-id');
-    let chapterId = idInputElement.value;
+    let chapterTitle = currentAudioBookChapter.querySelector('td.chapter-title').innerHTML;
+    chapterTitleSpanElement.innerHTML = chapterTitle;
 
-    setAudioBookChapterUrlById(chapterId);
+    let recordingFileInputElement = currentAudioBookChapter.querySelector('input.recording-file');
+    let recordingFile = recordingFileInputElement.value;
+
+    setAudioBookChapterUrl(recordingFile);
   }
 
   function init() {
